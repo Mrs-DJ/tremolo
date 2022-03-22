@@ -1,3 +1,9 @@
+<script>
+import {adverts} from "../../__testdata.json"
+console.log(adverts)
+</script>
+
+
 <section>
   <p>Hello world</p>
 </section>
