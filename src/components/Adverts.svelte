@@ -15,13 +15,8 @@
 </script>
 
 <section>
-  {#each adverts as {advert_title, band_name, body, instrument_required}}
-    <AdvertCard
-      {advert_title}
-      {band_name}
-      {instrument_required}
-      {body}
-    />
+  {#each adverts as { advert_title: title, band_name: group, body, instrument_required: instruments }}
+    <AdvertCard {title} {group} {instruments} {body} />
   {/each}
 </section>
 
