@@ -1,17 +1,27 @@
 <script>
   import { collection, getDocs } from "firebase/firestore";
-  import { adverts } from "../../__testdata.json";
   import { db } from "../firebase";
   import AdvertCard from "./AdvertCard.svelte";
+
+  const colRef = collection(db, "Adverts");
+  let adverts = [];
+
+  getDocs(colRef).then((results) => {
+    results.forEach((doc) => {
+      adverts.push(doc.data());
+    });
+    adverts = adverts;
+  });
 </script>
 
 <section>
-  {#await getDocs(collection(db, "Adverts")) then results}
-    {console.log(results)}
-    
-  {/await}
-  {#each adverts as { group, location, role }}
-    <AdvertCard {group} {location} {role} />
+  {#each adverts as {advert_title, band_name, body, instrument_required}}
+    <AdvertCard
+      {advert_title}
+      {band_name}
+      {instrument_required}
+      {body}
+    />
   {/each}
 </section>
 

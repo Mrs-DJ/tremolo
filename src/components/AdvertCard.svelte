@@ -1,11 +1,13 @@
 <script>
-    export let group;
-    export let location;
-    export let role;
+    export let advert_title;
+    export let band_name;
+    export let instrument_required;
+    export let body;
 </script>
 
 <div>
-    <h2>{group}</h2>
-    <p>{location}</p>
-    <p>{role}</p>
+    <h2>{advert_title}</h2>
+    <p>{band_name}</p>
+    <p>{instrument_required}</p>
+    <p>{body.slice(0, 40) + "..."}</p>
 </div>
