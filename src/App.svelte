@@ -117,12 +117,12 @@
       
       <button on:click={signInEmail}>
         <i class="fa fa-google" />
-        Sign In Email
+        Sign In with Email & Password
       </button>
       
       <button on:click={signInAnon}>
         <i class="fa fa-google" />
-        Sign In Anonymously
+        Sign In As Guest
       </button>
     </div>
     {/if}
@@ -150,6 +150,7 @@
     padding: 5px;
     max-width: 90vw;
     margin: auto;
+    justify-content: center;
   }
 </style>
 
