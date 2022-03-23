@@ -7,5 +7,4 @@
 	<nav class="flex">
 		<Hamburger bind:open={sidebar}/>
 	</nav>
-
 </header>
