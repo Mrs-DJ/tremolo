@@ -14,7 +14,7 @@
   });
 </script>
 
-<section>
+<section class="grid-template-columns: repeat(1, minmax(0, 1fr))">
   {#each adverts as { advert_title: title, band_name: group, body, instrument_required: instruments }}
     <AdvertCard {title} {group} {instruments} {body} />
   {/each}

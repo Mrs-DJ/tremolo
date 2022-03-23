@@ -1,5 +1,5 @@
 <header>
-  <h1>Tremolo</h1>
+  <h1 class="m-0 text-5xl text-orange-500">Tremolo</h1>
 </header>
 
 <style>
