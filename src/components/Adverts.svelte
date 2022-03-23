@@ -1,14 +1,12 @@
-<svelte:head>
-	<link rel="stylesheet" href="https://unpkg.com/mono-icons@1.0.5/iconfont/icons.css" >
-</svelte:head>
-
 <script>
   import { collection, getDocs } from "firebase/firestore";
   import { db } from "../firebase";
   import AdvertCard from "./AdvertCard.svelte";
+  
+  let adverts = [];
+  $: filteredAdverts = adverts;
 
   const colRef = collection(db, "Adverts");
-  let adverts = [];
   getDocs(colRef).then((results) => {
     results.forEach((doc) => {
       adverts.push(doc.data());
@@ -30,8 +28,6 @@
     "Rock",
   ];
 
-  $: filteredAdverts = adverts;
-
   const setGenre = ({ target: { value } }) => {
     if (value === "All") {
       filteredAdverts = filteredAdverts;
@@ -41,10 +37,17 @@
   };
 </script>
 
+<svelte:head>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/mono-icons@1.0.5/iconfont/icons.css"
+  />
+</svelte:head>
+
 <section>
   <div class="genre-filter">
-    <i class="mi mi-filter-alt"></i>
-    <select class="dropdown"on:change={setGenre}>
+    <i class="mi mi-filter-alt" />
+    <select class="dropdown" on:change={setGenre}>
       <option>All</option>
       {#each genres as genre}
         <option value={genre}>{genre}</option>
@@ -85,6 +88,6 @@
   }
 
   .mi {
-		font-size: 2rem;
-	}
+    font-size: 2rem;
+  }
 </style>
