@@ -9,6 +9,5 @@
     justify-content: center;
     color: white;
     height: 150px;
-    border-bottom: 1px dashed white;
   }
 </style>
