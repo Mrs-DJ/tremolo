@@ -9,9 +9,12 @@
   let isLoggedIn = false;
   let loggedInUser;
   let uid;
+
+  // --DUMMY EMAIL DETAILS --WILL BE REPLACED BY DYNAMIC VARIABLES SET BY FORM
   const email = "test_email@email.com";
   const password = "test_password";
 
+  // --AUTH STATE LISTENER
   onAuthStateChanged(auth, (user) => {
     if (user) {
       loggedInUser = auth.currentUser;
@@ -22,20 +25,21 @@
     } else {
       console.log("user logged out", loggedInUser, uid);
     }
-  })
+  });
 
-
+  // -- LOGIN FUNCTIONS
 
   function googleLogin() {
     signInWithRedirect(auth, googleProvider)
     .then((result) => {
       loggedInUser = result.user;
       console.log(loggedInUser, "user in google sign in");
-    }).catch((error) => {
+    })
+    .catch((error) => {
       const errorCode = error.code;
       const errorMsg = error.message;
       console.log(errorCode, errorMsg, "errors in google catch block");
-    })
+    });
   }
 
   function createUserAccount() {
@@ -48,55 +52,57 @@
     .catch((error) => {
       const errorCode = error.code;
       const errorMsg = error.message;
-      console.log("errors in create account", errorCode, errorMsg)
-    })
+      console.log("errors in create account", errorCode, errorMsg);
+    });
   }
 
   function signInEmail() {
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       loggedInUser = userCredential.user;
-      console.log("user obj in email sign-in", loggedInUser)
+      console.log("user obj in email sign-in", loggedInUser);
     }).catch((error) => {
       const errorCode = error.code;
       const errorMsg = error.message;
-      console.log("email sign-in error", errorCode, errorMsg)
-    })
+      console.log("email sign-in error", errorCode, errorMsg);
+    });
   }
 
   function signInAnon() {
-    signInAnonymously(auth).then(() => {
+    signInAnonymously(auth)
+    .then(() => {
       console.log("signed in anon");
-    }).catch((error) => {
+    })
+    .catch((error) => {
       const errorCode = error.code;
       const errorMsg = error.message;
       console.log("errors in sign in anon", errorCode, errorMsg);
-    })
+    });
   }
 
-
-
+  // --LOG OUT FUNCTION
   function logOut() {
     signOut(auth);
-    console.log("clicked")
+    console.log("clicked");
     console.log(loggedInUser);
     isLoggedIn = false;
   }
-
-
-
-
 </script>
+  
+
+
+
+
   
 
 <main>
   <Header />
   {#if isLoggedIn}
+  <Nav />
   <div>
   <button on:click={logOut}> Click to Log Out</button>
-  <!-- <Nav />
-  <Adverts /> -->
-</div>
+  </div>
+  <Adverts />
   {:else}
     <div class="login-form">
       <button on:click={googleLogin}>
@@ -116,12 +122,12 @@
       
       <button on:click={signInAnon}>
         <i class="fa fa-google" />
-        Sign In Anon
+        Sign In Anonymously
       </button>
-      <button on:click={logOut}> Click to Log Out</button>
     </div>
-  {/if}
-</main>
+    {/if}
+  </main>
+      
   
 
 <style>
@@ -136,4 +142,18 @@
       max-width: none;
     }
   }
+
+  .login-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-gap: 10px;
+    padding: 5px;
+    max-width: 90vw;
+    margin: auto;
+  }
 </style>
+
+
+
+
+  
