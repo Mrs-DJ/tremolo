@@ -100,14 +100,14 @@
   {#if isLoggedIn}
   <Nav />
   <div>
-  <button on:click={logOut}> Click to Log Out</button>
+  <button on:click={logOut}> Click To Log Out</button>
   </div>
   <Adverts />
   {:else}
     <div class="login-form">
       <button on:click={googleLogin}>
         <i class="fa fa-google" />
-        Sign In with Google
+        Sign-In With Google
       </button>
       
       <button on:click={createUserAccount}>
@@ -117,12 +117,12 @@
       
       <button on:click={signInEmail}>
         <i class="fa fa-google" />
-        Sign In with Email & Password
+        Sign-In With Email & Password
       </button>
       
       <button on:click={signInAnon}>
         <i class="fa fa-google" />
-        Sign In As Guest
+        Sign-In As Guest
       </button>
     </div>
     {/if}
