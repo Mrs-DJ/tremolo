@@ -3,12 +3,14 @@
   import Nav from "./components/Nav.svelte";
   import Adverts from "./components/Adverts.svelte";
 </script>
+  
 
 <main>
   <Header />
   <Nav />
   <Adverts />
 </main>
+  
 
 <style>
   main {
