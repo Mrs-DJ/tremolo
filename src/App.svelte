@@ -1,10 +1,23 @@
 <script>
-  import { auth, googleProvider, } from "./firebase";
-  import { signInWithRedirect, onAuthStateChanged, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInAnonymously } from "firebase/auth";
-
+  import { Router, Route } from "svelte-routing";
   import Header from "./components/Header.svelte";
+  import Navbar from "./components/Navbar.svelte";
+  import Sidebar from "./components/Sidebar.svelte";
+  import Home from "./routes/Home.svelte";
+  import Users from "./routes/Users.svelte";
+  import Profile from "./routes/Profile.svelte";
   import Nav from "./components/Nav.svelte";
   import Adverts from "./components/Adverts.svelte";
+  import { auth, googleProvider, } from "./firebase";
+  import { signInWithRedirect, onAuthStateChanged, signOut, 
+          createUserWithEmailAndPassword, 
+          signInWithEmailAndPassword, 
+          signInAnonymously } from "firebase/auth";
+  
+  let open = false;
+  
+  export let url = "";
+
 
   let isLoggedIn = false;
   let loggedInUser;
@@ -88,21 +101,15 @@
     isLoggedIn = false;
   }
 </script>
-  
 
-
-
-
-  
-
-<main>
-  <Header />
+<Router url="{url}">
+<Sidebar bind:open/>
+<Navbar bind:sidebar={open}/>
+  <main>
   {#if isLoggedIn}
-  <Nav />
   <div>
   <button on:click={logOut}> Click To Log Out</button>
   </div>
-  <Adverts />
   {:else}
     <div class="login-form">
       <button on:click={googleLogin}>
@@ -127,8 +134,12 @@
     </div>
     {/if}
   </main>
-      
-  
+  <div>
+    <Route path="Profile" component="{Profile}" />
+    <Route path="Users" component="{Users}" />
+    <Route path="/" component="{Home}" />
+  </div>
+</Router>
 
 <style>
   main {
@@ -136,7 +147,7 @@
     max-width: 240px;
     margin: 0 auto;
   }
-
+  
   @media (min-width: 640px) {
     main {
       max-width: none;
@@ -153,8 +164,3 @@
     justify-content: center;
   }
 </style>
-
-
-
-
-  

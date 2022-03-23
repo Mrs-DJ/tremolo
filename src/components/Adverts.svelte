@@ -37,28 +37,10 @@
   };
 </script>
 
-<svelte:head>
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/mono-icons@1.0.5/iconfont/icons.css"
-  />
-</svelte:head>
-
-<section>
-  <div class="genre-filter">
-    <i class="mi mi-filter-alt" />
-    <select class="dropdown" on:change={setGenre}>
-      <option>All</option>
-      {#each genres as genre}
-        <option value={genre}>{genre}</option>
-      {/each}
-    </select>
-  </div>
-  <section class="advert-grid">
-    {#each filteredAdverts as { advert_title: title, band_name: group, body, instrument_required: instruments }}
-      <AdvertCard {title} {group} {instruments} {body} />
-    {/each}
-  </section>
+<section class="grid-template-columns: repeat(1, minmax(0, 1fr))">
+  {#each adverts as { advert_title: title, band_name: group, body, instrument_required: instruments }}
+    <AdvertCard {title} {group} {instruments} {body} />
+  {/each}
 </section>
 
 <style>

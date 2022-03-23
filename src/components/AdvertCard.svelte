@@ -6,8 +6,8 @@
 </script>
 
 <div>
-  <h2>{title}</h2>
-  <p>{group}</p>
-  <p>{instruments}</p>
-  <p>{body.slice(0, 40) + "..."}</p>
+  <h2 class="text-xl font-bold">{title}</h2>
+  <p class="text-base text-m">{group}</p>
+  <p class="text-xs">{instruments}</p>
+  <p class="text-xs">{body.slice(0, 40) + "..."}</p>
 </div>
