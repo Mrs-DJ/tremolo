@@ -1,22 +1,33 @@
 <script>
+  import Select, { Option } from "@smui/select";
   import { collection, getDocs } from "firebase/firestore";
   import { db } from "../firebase";
   import AdvertCard from "./AdvertCard.svelte";
 
   const colRef = collection(db, "Adverts");
   let adverts = [];
-
   getDocs(colRef).then((results) => {
     results.forEach((doc) => {
       adverts.push(doc.data());
     });
     adverts = adverts;
   });
+
+  const genres = ["Indie", "Alternative", "Jazz", "Blues", "Folk", "Pop", "Shoegaze", "Dream-pop", "Hardcore", "Punk", "Rock"];
+  let value;
 </script>
 
 <section>
-  {#each adverts as { advert_title: title, band_name: group, body, instrument_required: instruments }}
-    <AdvertCard {title} {group} {instruments} {body} />
+	<div>
+		<Select bind:value>
+			{#each genres as genre}
+			  	<Option value={genre}>{genre}</Option>
+			{/each}
+		</Select>
+		<p>Selected:{value}</p>
+	</div>
+  {#each adverts as advert}
+    <AdvertCard {...advert} />
   {/each}
 </section>
 
