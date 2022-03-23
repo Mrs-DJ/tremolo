@@ -23,6 +23,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "@smui/select": "^6.0.0-beta.15",
     "firebase": "^9.6.9",
     "sirv-cli": "^2.0.0",
     "svelte-routing": "^1.6.0"
