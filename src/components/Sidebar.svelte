@@ -1,13 +1,14 @@
 <script>
     import NavLink from "../components/NavLink.svelte";
+
     export let open = false;
 </script>
 
 <aside class="absolute w-full h-20 bg-gray-200 border-r-2 shadow-lg" class:open>
 	<nav class="p-12 text-2xl space-x-8 text-center">
 		<NavLink class="cursor-pointer" to={"/"} bind:open={open}>Home</NavLink>
-		<NavLink to={"Users"}>Users</NavLink>
-		<NavLink to={"Profile"}>Profile</NavLink>
+		<NavLink to={"Users"} bind:open={open}>Users</NavLink>
+		<NavLink to={"Profile"} bind:open={open}>Profile</NavLink>
 	</nav>
 </aside>
 
