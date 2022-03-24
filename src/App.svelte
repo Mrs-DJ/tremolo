@@ -1,20 +1,24 @@
 <script>
+  import {
+    signInWithRedirect,
+    onAuthStateChanged,
+    signOut,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signInAnonymously,
+  } from "firebase/auth";
   import { Router, Route } from "svelte-routing";
   import Navbar from "./components/Navbar.svelte";
+  import UserBar from "./components/UserBar.svelte";
   import Sidebar from "./components/Sidebar.svelte";
   import Home from "./routes/Home.svelte";
   import Header from "./components/Header.svelte";
   import Users from "./routes/Users.svelte";
   import Profile from "./routes/Profile.svelte";
   import { auth, googleProvider } from "./firebase";
-  
-  import { signInWithRedirect, onAuthStateChanged, signOut, 
-          createUserWithEmailAndPassword, 
-          signInWithEmailAndPassword, 
-          signInAnonymously } from "firebase/auth";
-  
+
   let open = false;
-  
+
   export let url = "";
 
   let isLoggedIn = false;
@@ -72,7 +76,8 @@
       .then((userCredential) => {
         loggedInUser = userCredential.user;
         console.log("user obj in email sign-in", loggedInUser);
-      }).catch((error) => {
+      })
+      .catch((error) => {
         const errorCode = error.code;
         const errorMsg = error.message;
         console.log("email sign-in error", errorCode, errorMsg);
@@ -100,43 +105,44 @@
   }
 </script>
 
-<Router url="{url}">
-<Sidebar bind:open/>
-<Navbar bind:sidebar={open}/>
+<Router {url}>
+  <Sidebar bind:open />
+  <Navbar bind:sidebar={open} />
   <main>
     <Header />
-  {#if isLoggedIn}
-  <div>
-  <button on:click={logOut}> Click To Log Out</button>
-  </div>
-  {:else}
-    <div class="login-form">
-      <button on:click={googleLogin}>
-        <i class="fa fa-google" />
-        Sign-In With Google
-      </button>
-      
-      <button on:click={createUserAccount}>
-        <i class="fa fa-google" />
-        Create An Account With Email & Password
-      </button>
-      
-      <button on:click={signInEmail}>
-        <i class="fa fa-google" />
-        Sign-In With Email & Password
-      </button>
-      
-      <button on:click={signInAnon}>
-        <i class="fa fa-google" />
-        Sign-In As Guest
-      </button>
-    </div>
+    {#if isLoggedIn}
+      <div>
+        <button on:click={logOut}> Click To Log Out</button>
+        <UserBar {loggedInUser} {uid} />
+      </div>
+    {:else}
+      <div class="login-form">
+        <button on:click={googleLogin}>
+          <i class="fa fa-google" />
+          Sign-In With Google
+        </button>
+
+        <button on:click={createUserAccount}>
+          <i class="fa fa-google" />
+          Create An Account With Email & Password
+        </button>
+
+        <button on:click={signInEmail}>
+          <i class="fa fa-google" />
+          Sign-In With Email & Password
+        </button>
+
+        <button on:click={signInAnon}>
+          <i class="fa fa-google" />
+          Sign-In As Guest
+        </button>
+      </div>
     {/if}
   </main>
   <div>
-    <Route path="Profile" component="{Profile}" />
-    <Route path="Users" component="{Users}" />
-    <Route path="/" component="{Home}" />
+    <Route path="Profile" component={Profile} />
+    <Route path="Users" component={Users} />
+    <Route path="/" component={Home} />
   </div>
 </Router>
 
@@ -146,7 +152,7 @@
     max-width: 240px;
     margin: 0 auto;
   }
-  
+
   @media (min-width: 640px) {
     main {
       max-width: none;
