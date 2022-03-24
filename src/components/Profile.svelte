@@ -7,6 +7,21 @@
   let profile = {};
   let instruments = [];
   $: value = profile.bio || "";
+  const genres = [
+      "Indie",
+      "Alternative",
+      "Jazz",
+      "Blues",
+      "Folk",
+      "Pop",
+      "Shoegaze",
+      "Dream-pop",
+      "Hardcore",
+      "Punk",
+      "Rock",
+    ];
+
+    let userGenres = [];
 
   const colRef = doc(db, "Users", uid);
   getDoc(colRef).then((result) => {
@@ -15,7 +30,11 @@
     profile.instrument.forEach((instrument) => {
       instruments.push(instrument);
     });
+    profile.genre.forEach((genre) => {
+      userGenres.push(genre);
+    })
     instruments = instruments;
+    userGenres = userGenres;
   });
 
   const setValue = (e) => {
@@ -37,6 +56,8 @@
     );
   };
 
+  
+
   const setInstruments = (e) => {
     if (e.target.checked) {
       instruments.push(e.target.value);
@@ -45,7 +66,21 @@
     }
     console.log(instruments);
   };
+
+  const setGenres = (e) => {
+    if (e.target.checked) {
+      userGenres.push(e.target.value);
+    } else {
+      userGenres.splice(userGenres.indexOf(e.target.value), 1);
+    }
+    console.log(userGenres);
+  }
 </script>
+
+
+
+
+
 
 <section>
   <h1>{auth.currentUser.displayName}</h1>
@@ -102,6 +137,16 @@
       />
     </span>
 
+    <span class="genre-select">
+      {#each genres as genre}
+      <label for={genre}>{genre}</label>
+      <input type="checkbox" value={genre} checked={userGenres.includes(genre)} on:change={setGenres}/>
+      {/each}
+      
+      
+
+    </span>
+
     <button type="submit">Update</button>
   </form>
 </section>
@@ -124,4 +169,9 @@
   input {
     margin: 3px;
   }
+  .genre-select {
+    display: flex;
+  }
+
+
 </style>
