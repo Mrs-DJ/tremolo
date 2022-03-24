@@ -56,7 +56,7 @@
     </select>
   </div>
   <section class="advert-grid">
-    {#each adverts as { advert_title: title, band_name: group, body, instrument_required: instruments }}
+    {#each filteredAdverts as { advert_title: title, band_name: group, body, instrument_required: instruments }}
       <AdvertCard {title} {group} {instruments} {body} />
     {/each}
   </section>
