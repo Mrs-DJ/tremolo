@@ -86,6 +86,7 @@
 
   .dropdown {
     height: 2.2rem;
+    background-color: #333;
   }
 
   .mi {
