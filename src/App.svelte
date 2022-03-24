@@ -6,8 +6,7 @@
   import Header from "./components/Header.svelte";
   import Users from "./routes/Users.svelte";
   import Profile from "./routes/Profile.svelte";
-  import { auth, googleProvider } from "./firebase";
-  
+  import { auth, googleProvider, } from "./firebase";
   import { signInWithRedirect, onAuthStateChanged, signOut, 
           createUserWithEmailAndPassword, 
           signInWithEmailAndPassword, 
@@ -16,6 +15,7 @@
   let open = false;
   
   export let url = "";
+
 
   let isLoggedIn = false;
   let loggedInUser;
@@ -42,41 +42,41 @@
 
   function googleLogin() {
     signInWithRedirect(auth, googleProvider)
-      .then((result) => {
-        loggedInUser = result.user;
-        console.log(loggedInUser, "user in google sign in");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMsg = error.message;
-        console.log(errorCode, errorMsg, "errors in google catch block");
-      });
+    .then((result) => {
+      loggedInUser = result.user;
+      console.log(loggedInUser, "user in google sign in");
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMsg = error.message;
+      console.log(errorCode, errorMsg, "errors in google catch block");
+    });
   }
 
   function createUserAccount() {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential, ">>userCred in create account");
-        loggedInUser = userCredential.user;
-        console.log("logged in user", loggedInUser);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMsg = error.message;
-        console.log("errors in create account", errorCode, errorMsg);
-      });
+    .then((userCredential) => {
+      console.log(userCredential, ">>userCred in create account");
+      loggedInUser = userCredential.user;
+      console.log("logged in user", loggedInUser);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMsg = error.message;
+      console.log("errors in create account", errorCode, errorMsg);
+    });
   }
 
   function signInEmail() {
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        loggedInUser = userCredential.user;
-        console.log("user obj in email sign-in", loggedInUser);
-      }).catch((error) => {
-        const errorCode = error.code;
-        const errorMsg = error.message;
-        console.log("email sign-in error", errorCode, errorMsg);
-      });
+    .then((userCredential) => {
+      loggedInUser = userCredential.user;
+      console.log("user obj in email sign-in", loggedInUser);
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMsg = error.message;
+      console.log("email sign-in error", errorCode, errorMsg);
+    });
   }
 
   function signInAnon() {

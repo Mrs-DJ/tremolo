@@ -7,9 +7,9 @@
 </script>
   
   <div>
-    <h2>{username}</h2>
-    <p>{name}</p>
-    <p>{location}</p>
-    <p>{instrument}</p>
-    <p>{bio.slice(0, 40) + "..."}</p>
+    <h2 class="text-xl font-bold">{username}</h2>
+    <p class="text-base text-m">{name}</p>
+    <p class="text-base text-m">{instrument}</p>
+    <p class="text-base text-m">{location}</p>
+    <p class="text-xs">{bio.slice(0, 40) + "..."}</p>
   </div>
