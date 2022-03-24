@@ -29,11 +29,21 @@
       doc(db, "Users", uid),
       {
         bio: value,
+        instrument: instruments,
       },
       {
         merge: true,
-      },
+      }
     );
+  };
+
+  const setInstruments = (e) => {
+    if (e.target.checked) {
+      instruments.push(e.target.value);
+    } else {
+      instruments.splice(instruments.indexOf(e.target.value), 1);
+    }
+    console.log(instruments);
   };
 </script>
 
@@ -42,20 +52,55 @@
   <form on:submit={setUser}>
     <textarea {value} on:change={setValue} />
     <span class="checkbox-flex">
-    <label for="guitar">Guitar</label>
-    <input type="checkbox" name="guitar" value="guitar" checked={instruments.includes(value.toLowerCase())}/>
-    <label for="bass">Bass</label>
-    <input type="checkbox" name="bass" value="bass" />
-    <label for="drums">Drums</label>
-    <input type="checkbox" name="drums" value="drums" />
-    <label for="vocals">Vocals</label>
-    <input type="checkbox" name="vocals" value="vocals" />
-    <label for="keys">Keyboards/Synth</label>
-    <input type="checkbox" name="keys" value="keys" />
-    <label for="other">Other</label>
-    <input type="checkbox" name="other" value="other" />
+      <label for="guitar">Guitar</label>
+      <input
+        type="checkbox"
+        name="guitar"
+        value="Guitar"
+        checked={instruments.includes("Guitar")}
+        on:change={setInstruments}
+      />
+      <label for="bass">Bass</label>
+      <input
+        type="checkbox"
+        name="bass"
+        value="Bass"
+        checked={instruments.includes("Bass")}
+        on:change={setInstruments}
+      />
+      <label for="drums">Drums</label>
+      <input
+        type="checkbox"
+        name="drums"
+        value="Drums"
+        checked={instruments.includes("Drums")}
+        on:change={setInstruments}
+      />
+      <label for="vocals">Vocals</label>
+      <input
+        type="checkbox"
+        name="vocals"
+        value="Vocals"
+        checked={instruments.includes("Vocals")}
+        on:change={setInstruments}
+      />
+      <label for="keys">Keyboards/Synth</label>
+      <input
+        type="checkbox"
+        name="keys"
+        value="Keys"
+        checked={instruments.includes("Keys")}
+        on:change={setInstruments}
+      />
+      <label for="other">Other</label>
+      <input
+        type="checkbox"
+        name="other"
+        value="Other"
+        checked={instruments.includes("Other")}
+        on:change={setInstruments}
+      />
     </span>
-
 
     <button type="submit">Update</button>
   </form>
@@ -74,9 +119,9 @@
   }
   .checkbox-flex {
     display: flex;
-
   }
-  label, input {
+  label,
+  input {
     margin: 3px;
   }
 </style>
