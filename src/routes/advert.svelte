@@ -1,10 +1,10 @@
 <script>
-  import SingleAdvert from "../components/SingleAdvert.svelte";
-  //   import AdvertCard from "../components/AdvertCard.svelte";
   import { collection, query, where, getDocs, doc } from "firebase/firestore";
+  import SingleAdvert from "../components/SingleAdvert.svelte";
+  
   import { db } from "../firebase";
 
-  const url = window.location.href.slice(-20);
+  const url = window.location.href.match(/(?<=advert\/).*$/gi).pop();
   let advert = [];
   let adverts = [];
   const colRef = collection(db, "Adverts");

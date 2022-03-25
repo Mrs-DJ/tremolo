@@ -14,6 +14,7 @@
   import Home from "./routes/Home.svelte";
   import Header from "./components/Header.svelte";
   import Users from "./routes/Users.svelte";
+  import User from "./routes/User.svelte";
   import Profile from "./routes/Profile.svelte";
   import { auth, googleProvider } from "./firebase";
   import advert from "./routes/advert.svelte";
@@ -142,6 +143,7 @@
     <Route path="Users" component="{Users}" />
     <Route path="/" component="{Home}" />
     <Route path="/advert/:id" component="{advert}" />
+    <Route path="/User/:user_id" component="{User}" />
   </div>
 </Router>
 
