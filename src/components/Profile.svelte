@@ -59,21 +59,18 @@
 
   const setEmail = (e) => {
     email = e.target.value;
-    console.log("set email", email);
   };
 
   const setUser = (e) => {
-    console.log(e.target);
     e.preventDefault();
     if (emailRegex.test(email)) {
-      console.log("hello");
       setDoc(
         doc(db, "Users", uid),
         {
           bio: value,
           instrument: instruments,
           genre: userGenres,
-          email: email,
+          email,
         },
         {
           merge: true,
