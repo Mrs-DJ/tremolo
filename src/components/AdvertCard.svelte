@@ -5,6 +5,7 @@
   export let instruments;
   export let body;
   export let id;
+  export let docId;
 </script>
 
 <div>
