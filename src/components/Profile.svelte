@@ -20,7 +20,11 @@
     "Rock",
   ];
 
+  let email = "";
+
   let userGenres = [];
+
+  const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
   auth.operations.then(() => {
     uid = auth.currentUser.uid;
@@ -38,6 +42,9 @@
           userGenres.push(genre);
         });
       }
+      if (profile.email) {
+        email = profile.email;
+      }
 
       instruments = instruments;
       userGenres = userGenres;
@@ -50,20 +57,31 @@
     value = e.target.value;
   };
 
+  const setEmail = (e) => {
+    email = e.target.value;
+    console.log("set email", email);
+  };
+
   const setUser = (e) => {
     console.log(e.target);
     e.preventDefault();
-    setDoc(
-      doc(db, "Users", uid),
-      {
-        bio: value,
-        instrument: instruments,
-        genre: userGenres,
-      },
-      {
-        merge: true,
-      }
-    );
+    if (emailRegex.test(email)) {
+      console.log("hello");
+      setDoc(
+        doc(db, "Users", uid),
+        {
+          bio: value,
+          instrument: instruments,
+          genre: userGenres,
+          email: email,
+        },
+        {
+          merge: true,
+        },
+      );
+    } else {
+      console.log("invalid email");
+    }
   };
 
   const setInstruments = (e) => {
@@ -152,6 +170,14 @@
       {/each}
     </span>
 
+    <input
+      class="email-form"
+      on:change={setEmail}
+      type="text"
+      placeholder="Enter your email address here..."
+      value={email}
+    />
+
     <button type="submit">Update</button>
   </form>
 </section>
@@ -176,5 +202,8 @@
   }
   .genre-select {
     display: flex;
+  }
+  .email-form {
+    color: black;
   }
 </style>
