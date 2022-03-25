@@ -33,12 +33,8 @@
   onAuthStateChanged(auth, (user) => {
     if (user) {
       loggedInUser = auth.currentUser;
-      console.log("user obj in auth state", loggedInUser);
       isLoggedIn = true;
       uid = user.uid;
-      console.log("user ID in auth state", uid);
-    } else {
-      console.log("user logged out", loggedInUser, uid);
     }
   });
 

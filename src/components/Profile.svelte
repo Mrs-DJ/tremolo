@@ -2,40 +2,49 @@
   import { doc, getDoc, setDoc } from "firebase/firestore";
   import { db, auth } from "../firebase";
 
-  const { uid } = auth.currentUser;
-
+  let uid;
   let profile = {};
   let instruments = [];
   $: value = profile.bio || "";
   const genres = [
-      "Indie",
-      "Alternative",
-      "Jazz",
-      "Blues",
-      "Folk",
-      "Pop",
-      "Shoegaze",
-      "Dream-pop",
-      "Hardcore",
-      "Punk",
-      "Rock",
-    ];
+    "Indie",
+    "Alternative",
+    "Jazz",
+    "Blues",
+    "Folk",
+    "Pop",
+    "Shoegaze",
+    "Dream-pop",
+    "Hardcore",
+    "Punk",
+    "Rock",
+  ];
 
-    let userGenres = [];
+  let userGenres = [];
 
-  const colRef = doc(db, "Users", uid);
-  getDoc(colRef).then((result) => {
-    profile = result.data();
-    console.log(profile);
-    profile.instrument.forEach((instrument) => {
-      instruments.push(instrument);
+  auth.operations.then(() => {
+    uid = auth.currentUser.uid;
+    const colRef = doc(db, "Users", uid);
+    getDoc(colRef).then((result) => {
+      profile = result.data();
+      uid = auth.currentUser.uid;
+      if (profile.instrument) {
+        profile.instrument.forEach((instrument) => {
+          instruments.push(instrument);
+        });
+      }
+      if (profile.genre) {
+        profile.genre.forEach((genre) => {
+          userGenres.push(genre);
+        });
+      }
+
+      instruments = instruments;
+      userGenres = userGenres;
     });
-    profile.genre.forEach((genre) => {
-      userGenres.push(genre);
-    })
-    instruments = instruments;
-    userGenres = userGenres;
   });
+
+  // setTimeout(() => {
 
   const setValue = (e) => {
     value = e.target.value;
@@ -49,14 +58,13 @@
       {
         bio: value,
         instrument: instruments,
+        genre: userGenres,
       },
       {
         merge: true,
       }
     );
   };
-
-  
 
   const setInstruments = (e) => {
     if (e.target.checked) {
@@ -74,16 +82,11 @@
       userGenres.splice(userGenres.indexOf(e.target.value), 1);
     }
     console.log(userGenres);
-  }
+  };
 </script>
 
-
-
-
-
-
 <section>
-  <h1>{auth.currentUser.displayName}</h1>
+  <h1>{uid ? auth.currentUser.displayName : "loading..."}</h1>
   <form on:submit={setUser}>
     <textarea {value} on:change={setValue} />
     <span class="checkbox-flex">
@@ -139,12 +142,14 @@
 
     <span class="genre-select">
       {#each genres as genre}
-      <label for={genre}>{genre}</label>
-      <input type="checkbox" value={genre} checked={userGenres.includes(genre)} on:change={setGenres}/>
+        <label for={genre}>{genre}</label>
+        <input
+          type="checkbox"
+          value={genre}
+          checked={userGenres.includes(genre)}
+          on:change={setGenres}
+        />
       {/each}
-      
-      
-
     </span>
 
     <button type="submit">Update</button>
@@ -172,6 +177,4 @@
   .genre-select {
     display: flex;
   }
-
-
 </style>
