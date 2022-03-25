@@ -1,13 +1,31 @@
+<script>
+  import { Link } from "svelte-routing";
+</script>
+
 <header>
-  <h1 class="m-0 text-5xl text-orange-500">Tremolo</h1>
+  <Link to="/">
+    <div class="header-card">
+      <img src="images/logo.png" alt="Logo" class="logo" />
+      <img src="images/logo-alt.png" class="logo-front" alt="Logo" />
+    </div>
+  </Link>
 </header>
 
 <style>
-  header {
+  img {
+    width: 50%;
+  }
+  .header-card {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: white;
-    height: 150px;
+  }
+  .logo-front {
+    display: none;
+    position: absolute;
+  }
+  .header-card:hover .logo-front {
+    display: inline;
   }
 </style>

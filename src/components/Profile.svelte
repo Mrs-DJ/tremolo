@@ -1,10 +1,15 @@
 <script>
   import { doc, getDoc, setDoc } from "firebase/firestore";
   import { db, auth } from "../firebase";
+  import geofire from "geofire-common";
 
   let uid;
   let profile = {};
   let instruments = [];
+  let emailError = false;
+  let hash;
+  let lat;
+  let lng;
   $: value = profile.bio || "";
   const genres = [
     "Indie",
@@ -24,7 +29,8 @@
 
   let userGenres = [];
 
-  const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const emailRegex =
+    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
   auth.operations.then(() => {
     uid = auth.currentUser.uid;
@@ -49,6 +55,13 @@
       instruments = instruments;
       userGenres = userGenres;
     });
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(({ coords }) => {
+        hash = geofire.geohashForLocation([coords.latitude, coords.longitude]);
+        lat = coords.latitude;
+        lng = coords.longitude;
+      });
+    }
   });
 
   // setTimeout(() => {
@@ -71,13 +84,16 @@
           instrument: instruments,
           genre: userGenres,
           email,
+          location: hash,
+          lat,
+          lng,
         },
         {
           merge: true,
         },
       );
     } else {
-      console.log("invalid email");
+      emailError = true;
     }
   };
 
@@ -168,12 +184,14 @@
     </span>
 
     <input
-      class="email-form"
+      class={emailError ? "email-form-error" : "email-form"}
       on:change={setEmail}
       type="text"
       placeholder="Enter your email address here..."
       value={email}
+      label="HELLO"
     />
+    <p>{emailError ? "Email not valid" : ""}</p>
 
     <button type="submit">Update</button>
   </form>
@@ -202,5 +220,9 @@
   }
   .email-form {
     color: black;
+  }
+  .email-form-error {
+    color: black;
+    border: 3px solid red;
   }
 </style>
