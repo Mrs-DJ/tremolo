@@ -10,7 +10,9 @@
 
     getDocs(colRef).then((results) => {
       results.forEach((doc) => {
-        users.push(doc.data());
+        const data = doc.data();
+        const id = doc.id;
+        users.push({ id, ...data });
       });
       users = users;
     });
@@ -54,8 +56,8 @@ const setInstrument = ({ target: { value } }) => {
       </select>
     </div>
     <section class="user-grid">
-    {#each filteredUsers as { username, name, location, bio, instrument }}
-      <UserCard {username} {name} {location} {instrument} {bio} />
+    {#each filteredUsers as { username, name, location, bio, instrument, id }}
+      <UserCard {username} {name} {location} {instrument} {bio} {id} />
     {/each}
   </section>
 </section>
@@ -68,12 +70,9 @@ const setInstrument = ({ target: { value } }) => {
     grid-gap: 10px;
   }
     section {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      grid-gap: 10px;
       padding: 5px;
-      max-width: 90vw;
-      margin: auto;
+    margin: auto;
+    max-width: 90vw;
     }
 
     .dropdown {
