@@ -6,6 +6,7 @@
   let uid;
   let profile = {};
   let instruments = [];
+  let levels = {};
   let emailError = false;
   let hash;
   let lat;
@@ -51,9 +52,13 @@
       if (profile.email) {
         email = profile.email;
       }
+      if (profile.level) {
+        levels = profile.level;
+      }
 
       instruments = instruments;
       userGenres = userGenres;
+      console.log(levels);
     });
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -83,6 +88,7 @@
           bio: value,
           instrument: instruments,
           genre: userGenres,
+          level: levels,
           email,
           location: hash,
           lat,
@@ -100,10 +106,11 @@
   const setInstruments = (e) => {
     if (e.target.checked) {
       instruments.push(e.target.value);
+      instruments = instruments;
     } else {
       instruments.splice(instruments.indexOf(e.target.value), 1);
+      instruments = instruments;
     }
-    console.log(instruments);
   };
 
   const setGenres = (e) => {
@@ -113,6 +120,12 @@
       userGenres.splice(userGenres.indexOf(e.target.value), 1);
     }
     console.log(userGenres);
+  };
+
+  const setLevel = (e) => {
+    levels[e.target.id] = e.target.value;
+    levels = levels;
+    console.log(levels);
   };
 </script>
 
@@ -170,6 +183,17 @@
         on:change={setInstruments}
       />
     </span>
+    <ul>
+      {#each instruments as instrument}
+        <li>{instrument}</li>
+        <select id={instrument} class="level-dropdown" on:change={setLevel} value={levels[instrument]}>
+          <option value="Hobbyist">Hobbyist</option>
+          <option value="Amateur">Amateur</option>
+          <option value="Semi-pro">Semi-pro</option>
+          <option value="Pro">Pro</option>
+        </select>
+      {/each}
+    </ul>
 
     <span class="genre-select">
       {#each genres as genre}
@@ -224,5 +248,8 @@
   .email-form-error {
     color: black;
     border: 3px solid red;
+  }
+  .level-dropdown {
+    color: black;
   }
 </style>
