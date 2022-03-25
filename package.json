@@ -28,6 +28,7 @@
   "dependencies": {
     "autoprefixer": "^9.8.8",
     "firebase": "^9.6.9",
+    "geofire-common": "^5.2.0",
     "postcss": "^7.0.39",
     "sirv-cli": "^2.0.0",
     "svelte-routing": "^1.6.0",
