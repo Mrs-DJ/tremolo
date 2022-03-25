@@ -16,10 +16,12 @@
   import Users from "./routes/Users.svelte";
   import Profile from "./routes/Profile.svelte";
   import { auth, googleProvider } from "./firebase";
+  import advert from "./routes/advert.svelte";
 
   let open = false;
 
   export let url = "";
+
 
   let isLoggedIn = false;
   let loggedInUser;
@@ -42,29 +44,29 @@
 
   function googleLogin() {
     signInWithRedirect(auth, googleProvider)
-      .then((result) => {
-        loggedInUser = result.user;
-        console.log(loggedInUser, "user in google sign in");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMsg = error.message;
-        console.log(errorCode, errorMsg, "errors in google catch block");
-      });
+    .then((result) => {
+      loggedInUser = result.user;
+      console.log(loggedInUser, "user in google sign in");
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMsg = error.message;
+      console.log(errorCode, errorMsg, "errors in google catch block");
+    });
   }
 
   function createUserAccount() {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential, ">>userCred in create account");
-        loggedInUser = userCredential.user;
-        console.log("logged in user", loggedInUser);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMsg = error.message;
-        console.log("errors in create account", errorCode, errorMsg);
-      });
+    .then((userCredential) => {
+      console.log(userCredential, ">>userCred in create account");
+      loggedInUser = userCredential.user;
+      console.log("logged in user", loggedInUser);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMsg = error.message;
+      console.log("errors in create account", errorCode, errorMsg);
+    });
   }
 
   function signInEmail() {
@@ -136,9 +138,10 @@
     {/if}
   </main>
   <div>
-    <Route path="Profile" component={Profile} />
-    <Route path="Users" component={Users} />
-    <Route path="/" component={Home} />
+    <Route path="Profile" component="{Profile}" />
+    <Route path="Users" component="{Users}" />
+    <Route path="/" component="{Home}" />
+    <Route path="/advert/:id" component="{advert}" />
   </div>
 </Router>
 

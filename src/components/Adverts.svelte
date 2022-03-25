@@ -3,13 +3,18 @@
     import { db } from "../firebase";
     import AdvertCard from "./AdvertCard.svelte";
     
+
     let adverts = [];
     $: filteredAdverts = adverts;
     
     const colRef = collection(db, "Adverts");
+    
     getDocs(colRef).then((results) => {
       results.forEach((doc) => {
-        adverts.push(doc.data());
+        const data = doc.data();
+        const id = doc.id;
+        adverts.push({ id, ...data });
+        console.log(adverts);
       });
       adverts = adverts;
     });
@@ -56,8 +61,8 @@
     </select>
   </div>
   <section class="advert-grid">
-    {#each filteredAdverts as { advert_title: title, band_name: group, body, instrument_required: instruments }}
-      <AdvertCard {title} {group} {instruments} {body} />
+    {#each filteredAdverts as {advert_title: title, band_name: group, body, instrument_required: instruments, id }}
+      <AdvertCard {title} {group} {instruments} {body} {id} />
     {/each}
   </section>
 </section>

@@ -10,8 +10,7 @@
 
 <div>
   <Link to={`/advert/${id}`}><h2 class="text-xl font-bold">{title}</h2></Link>
-  <!-- <h2 class="text-xl font-bold">{title}</h2> -->
   <p class="text-base text-m">{group}</p>
   <p class="text-xs">{instruments}</p>
-  <p class="text-xs">{body.slice(0, 40) + "..."}</p>
+  <p class="text-xs">{body}</p>
 </div>
