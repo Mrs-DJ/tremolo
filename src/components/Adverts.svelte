@@ -3,7 +3,6 @@
     import { db } from "../firebase";
     import AdvertCard from "./AdvertCard.svelte";
     
-
     let adverts = [];
     $: filteredAdverts = adverts;
     
@@ -14,7 +13,6 @@
         const data = doc.data();
         const id = doc.id;
         adverts.push({ id, ...data });
-        console.log(adverts);
       });
       adverts = adverts;
     });

@@ -16,7 +16,6 @@
     });
     adverts = adverts;
     advert = adverts.filter((fullAdvert) => fullAdvert.id === url);
-    console.log(advert);
   });
 </script>
 

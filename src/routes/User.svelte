@@ -16,7 +16,6 @@
       });
       users = users;
       user = users.filter((fullUser) => fullUser.id === url);
-      console.log(user);
     });
 </script>
   
