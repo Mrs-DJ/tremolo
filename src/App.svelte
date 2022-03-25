@@ -11,7 +11,7 @@
           createUserWithEmailAndPassword, 
           signInWithEmailAndPassword, 
           signInAnonymously } from "firebase/auth";
-  
+  import advert from "./routes/advert.svelte";
   let open = false;
   
   export let url = "";
@@ -137,6 +137,7 @@
     <Route path="Profile" component="{Profile}" />
     <Route path="Users" component="{Users}" />
     <Route path="/" component="{Home}" />
+    <Route path="/advert/:id" component="{advert}" />
   </div>
 </Router>
 
