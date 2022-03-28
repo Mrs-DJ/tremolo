@@ -1,41 +1,81 @@
 <script>
-    import {db, auth} from "../firebase.js";
-    import {collection, addDoc, query, orderBy, limit, onSnapshot, setDoc, updateDoc, doc, serverTimestamp} from "firebase/firestore";
-    export let id;
-    let uid;
-    let message;
+  import {
+    collection,
+    addDoc,
+    query,
+    orderBy,
+    limit,
+    onSnapshot,
+    setDoc,
+    updateDoc,
+    doc,
+    serverTimestamp,
+  } from "firebase/firestore";
+  import { db, auth } from "../firebase";
 
+  export let id;
+  let uid;
+  let chatId;
+  let message = "";
+  let messages = [];
+  let messageQuery;
 
+  const setMessage = ({ target: { value } }) => {
+    message = value;
+  };
 
-    const setMessage = (e) => {
-        message = e.target.value;
-        console.log(message)
-    };
+  auth.operations.then(() => {
+    uid = auth.currentUser.uid;
+    chatId = uid < id ? `chat_${uid}_${id}` : `chat_${id}_${uid}`;
+    messageQuery = query(
+      collection(db, "Chats", chatId, "messages"),
+      orderBy("timestamp", "desc"),
+      limit(12),
+    );
 
-
-    // auth.operations.then(() => {
-    // uid = auth.currentUser.uid;}
-
-    const addMessage = (e) => {
-        e.preventDefault();
-        addDoc(doc(db, "Chats"),
-        {
-            text: message,
-            timestamp: serverTimestamp(),
+    onSnapshot(messageQuery, (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        const latestMessages = change.doc.data();
+        if (latestMessages.timestamp) {
+          messages = [...messages, latestMessages];
         }
-        )
-        }
+      });
+    });
+  });
+
+  const addMessage = (e) => {
+    e.preventDefault();
+    addDoc(
+      collection(db, "Chats", chatId, "messages"),
+      {
+        text: message,
+        timestamp: serverTimestamp(),
+      },
+      {
+        merge: true,
+      },
+    );
+    message = "";
+  };
 </script>
 
-<p>{id}</p>
-
-<form on:submit={addMessage}>
-<input type="text" on:change={setMessage}/>
-<button type="submit">Send Message</button>
-</form>
+<section>
+  <div>
+    {#each messages as { text }}
+      <p>{text}</p>
+    {/each}
+  </div>
+  <form on:submit={addMessage}>
+    <input type="text" value={message} on:change={setMessage} />
+    <button type="submit">Send</button>
+  </form>
+</section>
 
 <style>
-    input {
-        color:black;
-    }
+  input {
+    color: black;
+  }
+  p {
+    color: white;
+  }
 </style>
