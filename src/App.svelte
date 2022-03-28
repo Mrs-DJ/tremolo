@@ -15,6 +15,7 @@
   import Header from "./components/Header.svelte";
   import Users from "./routes/Users.svelte";
   import User from "./routes/User.svelte";
+  import Post from "./routes/Post.svelte";
   import Profile from "./routes/Profile.svelte";
   import { auth, googleProvider } from "./firebase";
   import advert from "./routes/advert.svelte";
@@ -139,6 +140,7 @@
     {/if}
   </main>
   <div>
+    <Route path="Post" component="{Post}" />
     <Route path="Profile" component="{Profile}" />
     <Route path="Users" component="{Users}" />
     <Route path="/" component="{Home}" />
