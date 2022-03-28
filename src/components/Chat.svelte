@@ -9,6 +9,7 @@
 
     const setMessage = (e) => {
         message = e.target.value;
+        console.log(message)
     };
 
 
@@ -22,7 +23,8 @@
             text: message,
             timestamp: serverTimestamp(),
         }
-        )}
+        )
+        }
 </script>
 
 <p>{id}</p>
@@ -31,3 +33,9 @@
 <input type="text" on:change={setMessage}/>
 <button type="submit">Send Message</button>
 </form>
+
+<style>
+    input {
+        color:black;
+    }
+</style>
