@@ -22,7 +22,7 @@
             text: message,
             timestamp: serverTimestamp(),
         }
-    }
+        )}
 </script>
 
 <p>{id}</p>
