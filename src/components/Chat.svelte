@@ -29,7 +29,7 @@
     chatId = uid < id ? `chat_${uid}_${id}` : `chat_${id}_${uid}`;
     messageQuery = query(
       collection(db, "Chats", chatId, "messages"),
-      orderBy("timestamp", "desc"),
+      orderBy("timestamp", "asc"),
       limit(12),
     );
 
@@ -43,6 +43,11 @@
     });
   });
 
+  const getTimeElapsed = (time) => {
+    const date = new Date();
+    return Math.floor((date.getTime() - time) / 60000);
+  };
+
   const addMessage = (e) => {
     e.preventDefault();
     addDoc(
@@ -53,16 +58,16 @@
       },
       {
         merge: true,
-      },
+      }
     );
     message = "";
   };
 </script>
 
-<section>
+<section class="text-center">
   <div>
-    {#each messages as { text }}
-      <p>{text}</p>
+    {#each messages as { text, timestamp }}
+      <p>{text}, {getTimeElapsed(timestamp.toMillis()) + "m ago"} </p>
     {/each}
   </div>
   <form on:submit={addMessage}>
