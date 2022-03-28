@@ -12,6 +12,7 @@
     serverTimestamp,
   } from "firebase/firestore";
   import { db, auth } from "../firebase";
+  import MessageCard from "./MessageCard.svelte";
 
   export let id;
   let uid;
@@ -30,7 +31,7 @@
     messageQuery = query(
       collection(db, "Chats", chatId, "messages"),
       orderBy("timestamp", "asc"),
-      limit(12),
+      limit(12)
     );
 
     onSnapshot(messageQuery, (snapshot) => {
@@ -43,16 +44,12 @@
     });
   });
 
-  const getTimeElapsed = (time) => {
-    const date = new Date();
-    return Math.floor((date.getTime() - time) / 60000);
-  };
-
   const addMessage = (e) => {
     e.preventDefault();
     addDoc(
       collection(db, "Chats", chatId, "messages"),
       {
+        author: uid,
         text: message,
         timestamp: serverTimestamp(),
       },
@@ -66,8 +63,8 @@
 
 <section class="text-center">
   <div>
-    {#each messages as { text, timestamp }}
-      <p>{text}, {getTimeElapsed(timestamp.toMillis()) + "m ago"} </p>
+    {#each messages as { author: authorId, text, timestamp }}
+      <MessageCard {authorId} {text} {timestamp} />
     {/each}
   </div>
   <form on:submit={addMessage}>
@@ -77,6 +74,10 @@
 </section>
 
 <style>
+  .text-center {
+    max-width: 80vw;
+    margin: auto;
+  }
   input {
     color: black;
   }
