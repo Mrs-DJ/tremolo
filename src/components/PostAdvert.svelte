@@ -1,12 +1,13 @@
 <script>
-    import { doc, getDoc, setDoc, } from "firebase/firestore";
+    import { doc, getDoc, addDoc, collection } from "firebase/firestore";
     import { db, auth } from "../firebase";
     import geofire from "geofire-common";
 
     let uid;
-    let advert = {};
+    let profile = {};
     let lat;
     let lng;
+    let locationError = false;
     let levels = {};
     let hash;
     let band;
@@ -30,31 +31,17 @@
 
 auth.operations.then(() => {
   uid = auth.currentUser.uid;
-  const colRef = doc(db, "Adverts", uid);
+  const colRef = doc(db, "Users", uid);
       getDoc(colRef).then((result) => {
-        advert = result.data();
+        profile = result.data();
         uid = auth.currentUser.uid;
-  });
-  if (advert.genre) {
-        advert.genre.forEach((genre) => {
-          advertGenres.push(genre);
+        navigator.geolocation.getCurrentPosition(({ coords }) => {
+          hash = geofire.geohashForLocation([coords.latitude, coords.longitude]);
+          lat = coords.latitude;
+          lng = coords.longitude;
         });
-      }
-  if (advert.level) {
-        levels = advert.level;
-      }
-  if (advert.instrument) {
-        advert.instrument.forEach((instrument) => {
-          instruments.push(instrument);
-        });
-  if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(({ coords }) => {
-            hash = geofire.geohashForLocation([coords.latitude, coords.longitude]);
-            lat = coords.latitude;
-            lng = coords.longitude;
-          });
-        }
-    }
+    },
+  )
 });
 
 const setInstruments = (e) => {
@@ -78,22 +65,25 @@ const setGenres = (e) => {
 
 const setAdvert = (e) => {
   e.preventDefault();
-  setDoc(
-      doc(db, "Adverts").set(
-      {
-          advert_title: title,
-          band_name: band,
-          instrument_required: instruments,
-          genre: advertGenres,
-          level: levels,
-          body,
-          location: hash,
-          lat,
-          lng,
-          owner_id: uid,
-        }
-    ),
-      );
+    if(!hash || !uid) {
+        locationError = true;
+  } else {
+        addDoc(
+          collection(db, "Adverts"),
+          {
+            advert_title: title,
+            band_name: band,
+            instrument_required: instruments,
+            genre: advertGenres,
+            level: levels,
+            body,
+            location: hash,
+            lat,
+            lng,
+            owner_id: uid,
+          },
+        );
+  }
 };
 
 const setTitle = (e) => {
@@ -117,10 +107,10 @@ const setLevel = (e) => {
 
 <section>
     <h1>Advert details</h1>
-    <form on:submit={setAdvert} />
-        <textarea {title} on:change={setTitle}></textarea>Title
-        <textarea {band} on:change={setBand}></textarea>Band Name
-        <textarea {body} on:change={setBody}></textarea>Advert Text
+    <form on:submit={setAdvert}>
+        <textarea {title} on:change={setTitle} required></textarea>Title
+        <textarea {band} on:change={setBand} required></textarea>Band Name
+        <textarea {body} on:change={setBody} required></textarea>Advert Text
         <span class="checkbox-flex">Instruments:
             <label for="guitar">Guitar</label>
             <input
@@ -194,7 +184,11 @@ const setLevel = (e) => {
               />
             {/each}
           </span>
+
+          <p>{locationError ? "Must be signed in with location settings on to post!" : ""}</p>
+
           <button type="submit">Post</button>
+    </form>
 </section>
 
 <style>
