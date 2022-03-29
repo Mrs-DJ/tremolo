@@ -174,9 +174,12 @@ Promise.all(promises).then((snapshots) => {
       }
     }
 }
-});
-}
-}
+return matchingDocs;
+      }).then((matchingDocs) => {
+        filteredAdverts = matchingDocs;
+      });
+    };
+  }
 </script>
 
 
