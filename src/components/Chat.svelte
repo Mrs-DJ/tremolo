@@ -22,6 +22,12 @@
     message = value;
   };
 
+  const deleteMessage = (toBeRemoved) => {
+    messages.slice(toBeRemoved, 1);
+    messages = messages;
+    console.log(messages);
+  };
+
   auth.operations.then(() => {
     uid = auth.currentUser.uid;
     chatId = uid < id ? `chat_${uid}_${id}` : `chat_${id}_${uid}`;
@@ -33,10 +39,17 @@
 
     onSnapshot(messageQuery, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
-        const latestMessages = { id: change.doc.id, ...change.doc.data() };
-        console.log(latestMessages);
-        if (latestMessages.timestamp) {
-          messages = [...messages, latestMessages];
+        if (change.type === "removed") {
+          const toBeRemoved = messages.findIndex(
+            (msg) => msg.id === change.doc.id,
+          );
+          setTimeout(deleteMessage(toBeRemoved), 3000);
+        } else {
+          const latestMessages = { id: change.doc.id, ...change.doc.data() };
+
+          if (latestMessages.timestamp) {
+            messages = [...messages, latestMessages];
+          }
         }
       });
     });
@@ -62,7 +75,7 @@
 <section class="text-center">
   <div>
     {#each messages as { author: authorId, text, timestamp, id }}
-      <MessageCard {id} {authorId} {text} {timestamp} />
+      <MessageCard {id} {authorId} {text} {timestamp} {chatId} />
     {/each}
   </div>
   <form on:submit={addMessage}>
