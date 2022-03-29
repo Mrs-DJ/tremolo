@@ -11,7 +11,7 @@
   let hash;
   let lat;
   let lng;
-  $: value = profile.bio || "";
+  $: value = profile ? profile.bio || "" : "";
   const genres = [
     "Indie",
     "Alternative",
@@ -39,21 +39,23 @@
     getDoc(colRef).then((result) => {
       profile = result.data();
       uid = auth.currentUser.uid;
-      if (profile.instrument) {
-        profile.instrument.forEach((instrument) => {
-          instruments.push(instrument);
-        });
-      }
-      if (profile.genre) {
-        profile.genre.forEach((genre) => {
-          userGenres.push(genre);
-        });
-      }
-      if (profile.email) {
-        email = profile.email;
-      }
-      if (profile.level) {
-        levels = profile.level;
+      if (profile) {
+        if (profile.instrument) {
+          profile.instrument.forEach((instrument) => {
+            instruments.push(instrument);
+          });
+        }
+        if (profile.genre) {
+          profile.genre.forEach((genre) => {
+            userGenres.push(genre);
+          });
+        }
+        if (profile.email) {
+          email = profile.email;
+        }
+        if (profile.level) {
+          levels = profile.level;
+        }
       }
 
       instruments = instruments;
@@ -97,7 +99,7 @@
         },
         {
           merge: true,
-        },
+        }
       );
     } else {
       emailError = true;
@@ -131,7 +133,7 @@
 </script>
 
 <section>
-  <h1>{uid ? auth.currentUser.displayName : "loading..."}</h1>
+  <h1>{uid ? auth.currentUser.displayName || "Guest" : "loading..."}</h1>
   <form on:submit={setUser}>
     <textarea {value} on:change={setValue} />
     <span class="checkbox-flex">
@@ -187,7 +189,12 @@
     <ul>
       {#each instruments as instrument}
         <li>{instrument}</li>
-        <select id={instrument} class="level-dropdown" on:change={setLevel} value={levels[instrument]}>
+        <select
+          id={instrument}
+          class="level-dropdown"
+          on:change={setLevel}
+          value={levels[instrument]}
+        >
           <option value="Hobbyist">Hobbyist</option>
           <option value="Amateur">Amateur</option>
           <option value="Semi-pro">Semi-pro</option>
