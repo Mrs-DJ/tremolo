@@ -82,6 +82,7 @@
   const setUser = (e) => {
     e.preventDefault();
     if (emailRegex.test(email)) {
+      emailError = false;
       setDoc(
         doc(db, "Users", uid),
         {
