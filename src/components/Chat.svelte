@@ -6,9 +6,6 @@
     orderBy,
     limit,
     onSnapshot,
-    setDoc,
-    updateDoc,
-    doc,
     serverTimestamp,
   } from "firebase/firestore";
   import { db, auth } from "../firebase";
@@ -36,7 +33,8 @@
 
     onSnapshot(messageQuery, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
-        const latestMessages = change.doc.data();
+        const latestMessages = { id: change.doc.id, ...change.doc.data() };
+        console.log(latestMessages);
         if (latestMessages.timestamp) {
           messages = [...messages, latestMessages];
         }
@@ -63,8 +61,8 @@
 
 <section class="text-center">
   <div>
-    {#each messages as { author: authorId, text, timestamp }}
-      <MessageCard {authorId} {text} {timestamp} />
+    {#each messages as { author: authorId, text, timestamp, id }}
+      <MessageCard {id} {authorId} {text} {timestamp} />
     {/each}
   </div>
   <form on:submit={addMessage}>
