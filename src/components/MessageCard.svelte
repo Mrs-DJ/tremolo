@@ -8,6 +8,7 @@
   export let timestamp;
   export let id;
   export let chatId;
+  export let uid;
 
   let isDeleted = false;
   let error;
@@ -36,9 +37,10 @@
     <span class="message-header">
       <h4><strong>{name}</strong></h4>
       <p>{time}</p>
+      <button class={uid !== authorId ? "button-disabled" : "button"} on:click={deleteMsg} disabled={uid !== authorId} ><i class="mi mi-delete" /></button>
     </span>
     <p>{text}</p>
-    <button on:click={deleteMsg}>Delete</button>
+    
   {/if}
 </div>
 
@@ -46,10 +48,20 @@
   .message {
     text-align: left;
     border-top: 1px solid white;
+    padding: 10px;
+  }
+
+  .button {
+    background-color: #fc02b8;
+  }
+
+  .button-disabled {
+    visibility: hidden;
   }
 
   .message-header h4,
-  .message-header p {
+  .message-header p,
+  .message-header button {
     display: inline-block;
   }
 

@@ -23,9 +23,8 @@
   };
 
   const deleteMessage = (toBeRemoved) => {
-    messages.slice(toBeRemoved, 1);
+    messages.splice(toBeRemoved, 1);
     messages = messages;
-    console.log(messages);
   };
 
   auth.operations.then(() => {
@@ -43,7 +42,7 @@
           const toBeRemoved = messages.findIndex(
             (msg) => msg.id === change.doc.id,
           );
-          setTimeout(deleteMessage(toBeRemoved), 3000);
+          setTimeout(() => deleteMessage(toBeRemoved), 3000);
         } else {
           const latestMessages = { id: change.doc.id, ...change.doc.data() };
 
@@ -75,7 +74,7 @@
 <section class="text-center">
   <div>
     {#each messages as { author: authorId, text, timestamp, id }}
-      <MessageCard {id} {authorId} {text} {timestamp} {chatId} />
+      <MessageCard {id} {authorId} {text} {timestamp} {chatId} {uid} />
     {/each}
   </div>
   <form on:submit={addMessage}>
