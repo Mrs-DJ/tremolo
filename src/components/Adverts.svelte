@@ -6,6 +6,9 @@
     
     let uid;
     let hash;
+    let lat;
+    let lng;
+    let profile = {};
     let adverts = [];
     $: filteredAdverts = adverts;
     
@@ -63,26 +66,117 @@ const setDistance = ({ target: { value } }) => {
       filteredAdverts = filteredAdverts;
     }
     if (value === "5km") {
-      const center = [0, -2.3];
+      const center = [lat, lng];
       const radiusInM = 5 * 1000;
       const bounds = geofire.geohashQueryBounds(center, radiusInM);
       const promises = [];
       for (const b of bounds) {
     const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
-  promises.push(q.get());
+  promises.push(getDocs(q));
 }
 Promise.all(promises).then((snapshots) => {
   const matchingDocs = [];
 
   for (const snap of snapshots) {
     for (const doc of snap.docs) {
-      console.log(doc)
+      const data = doc.data()
+      const id = doc.id
       const lat = doc.get('lat');
       const lng = doc.get('lng');
       const distanceInKm = geofire.distanceBetween([lat, lng], center);
       const distanceInM = distanceInKm * 1000;
       if (distanceInM <= radiusInM) {
-        matchingDocs.push(doc);
+        matchingDocs.push({id, ...data});
+      }
+    }
+}
+        return matchingDocs;
+      }).then((matchingDocs) => {
+        filteredAdverts = matchingDocs;
+      });
+    }
+    if (value === "10km") {
+      const center = [lat, lng];
+      const radiusInM = 10 * 1000;
+      const bounds = geofire.geohashQueryBounds(center, radiusInM);
+      const promises = [];
+      for (const b of bounds) {
+    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
+  promises.push(getDocs(q));
+}
+Promise.all(promises).then((snapshots) => {
+  const matchingDocs = [];
+
+  for (const snap of snapshots) {
+    for (const doc of snap.docs) {
+      const data = doc.data()
+      const id = doc.id
+      const lat = doc.get('lat');
+      const lng = doc.get('lng');
+      const distanceInKm = geofire.distanceBetween([lat, lng], center);
+      const distanceInM = distanceInKm * 1000;
+      if (distanceInM <= radiusInM) {
+        matchingDocs.push({id, ...data});
+      }
+    }
+}
+        return matchingDocs;
+      }).then((matchingDocs) => {
+        filteredAdverts = matchingDocs;
+      });
+    };
+ if (value === "25km") {
+      const center = [lat, lng];
+      const radiusInM = 25 * 1000;
+      const bounds = geofire.geohashQueryBounds(center, radiusInM);
+      const promises = [];
+      for (const b of bounds) {
+    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
+  promises.push(getDocs(q));
+}
+Promise.all(promises).then((snapshots) => {
+  const matchingDocs = [];
+
+  for (const snap of snapshots) {
+    for (const doc of snap.docs) {
+      const data = doc.data()
+      const id = doc.id
+      const lat = doc.get('lat');
+      const lng = doc.get('lng');
+      const distanceInKm = geofire.distanceBetween([lat, lng], center);
+      const distanceInM = distanceInKm * 1000;
+      if (distanceInM <= radiusInM) {
+        matchingDocs.push({id, ...data});
+      }
+    }
+}
+        return matchingDocs;
+      }).then((matchingDocs) => {
+        filteredAdverts = matchingDocs;
+      });
+    };
+if (value === "50km") {
+      const center = [lat, lng];
+      const radiusInM = 50 * 1000;
+      const bounds = geofire.geohashQueryBounds(center, radiusInM);
+      const promises = [];
+      for (const b of bounds) {
+    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
+  promises.push(getDocs(q));
+}
+Promise.all(promises).then((snapshots) => {
+  const matchingDocs = [];
+
+  for (const snap of snapshots) {
+    for (const doc of snap.docs) {
+      const data = doc.data()
+      const id = doc.id
+      const lat = doc.get('lat');
+      const lng = doc.get('lng');
+      const distanceInKm = geofire.distanceBetween([lat, lng], center);
+      const distanceInM = distanceInKm * 1000;
+      if (distanceInM <= radiusInM) {
+        matchingDocs.push({id, ...data});
       }
     }
 }
