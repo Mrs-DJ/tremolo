@@ -20,7 +20,7 @@
 </script>
   
   <div>
-    {#each user as { username, name, bio, instrument, location }}
-      <SingleUser {username} {name} {location} {instrument} {bio} />
+    {#each user as { id, username, name, bio, instrument, location }}
+      <SingleUser {id} {username} {name} {location} {instrument} {bio} />
     {/each}
   </div>
