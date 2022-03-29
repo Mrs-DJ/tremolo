@@ -59,8 +59,8 @@
     </select>
   </div>
   <section class="advert-grid">
-    {#each filteredAdverts as {advert_title: title, band_name: group, body, instrument_required: instruments, id }}
-      <AdvertCard {title} {group} {instruments} {body} {id} />
+    {#each filteredAdverts as {advert_title: title, band_name: group, body, instrument_required: instruments, id, owner_id }}
+      <AdvertCard {title} {group} {instruments} {body} {id} {owner_id}/>
     {/each}
   </section>
 </section>
