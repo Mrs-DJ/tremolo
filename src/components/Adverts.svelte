@@ -1,11 +1,17 @@
 <script>
-    import { collection, getDocs } from "firebase/firestore";
-    import { db } from "../firebase";
-    import AdvertCard from "./AdvertCard.svelte";
+    import { collection, getDocs, doc, getDoc, orderBy, startAt, endAt, query } from "firebase/firestore";
+  import { db, auth } from "../firebase";
+  import geofire from "geofire-common";
+  import AdvertCard from "./AdvertCard.svelte";
     
+    let uid;
+    let hash;
+    let lat;
+    let lng;
+    let profile = {};
     let adverts = [];
     $: filteredAdverts = adverts;
-    
+
     const colRef = collection(db, "Adverts");
     
     getDocs(colRef).then((results) => {
@@ -30,7 +36,6 @@
       "Punk",
       "Rock",
     ];
-
     const setGenre = ({ target: { value } }) => {
       if (value === "All") {
         filteredAdverts = filteredAdverts;
@@ -38,6 +43,140 @@
         filteredAdverts = adverts.filter((ad) => ad.genre.includes(value));
       }
     };
+    auth.operations.then(() => {
+    uid = auth.currentUser.uid;
+    const colRef = doc(db, "Users", uid);
+    getDoc(colRef).then((result) => {
+    profile = result.data();
+    uid = auth.currentUser.uid;
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(({ coords }) => {
+        hash = geofire.geohashForLocation([coords.latitude, coords.longitude]);
+        lat = coords.latitude;
+        lng = coords.longitude;
+      });
+    }
+  });
+});
+    
+const setDistance = ({ target: { value } }) => {
+    if (value === "All") {
+      filteredAdverts = filteredAdverts;
+    }
+    if (value === "5km") {
+      const center = [lat, lng];
+      const radiusInM = 5 * 1000;
+      const bounds = geofire.geohashQueryBounds(center, radiusInM);
+      const promises = [];
+      for (const b of bounds) {
+    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
+  promises.push(getDocs(q));
+}
+Promise.all(promises).then((snapshots) => {
+  const matchingDocs = [];
+  for (const snap of snapshots) {
+    for (const doc of snap.docs) {
+      const data = doc.data()
+      const id = doc.id
+      const lat = doc.get('lat');
+      const lng = doc.get('lng');
+      const distanceInKm = geofire.distanceBetween([lat, lng], center);
+      const distanceInM = distanceInKm * 1000;
+      if (distanceInM <= radiusInM) {
+        matchingDocs.push({id, ...data});
+      }
+    }
+}
+        return matchingDocs;
+      }).then((matchingDocs) => {
+        filteredAdverts = matchingDocs;
+      });
+    }
+    if (value === "10km") {
+      const center = [lat, lng];
+      const radiusInM = 10 * 1000;
+      const bounds = geofire.geohashQueryBounds(center, radiusInM);
+      const promises = [];
+      for (const b of bounds) {
+    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
+  promises.push(getDocs(q));
+}
+Promise.all(promises).then((snapshots) => {
+  const matchingDocs = [];
+  for (const snap of snapshots) {
+    for (const doc of snap.docs) {
+      const data = doc.data()
+      const id = doc.id
+      const lat = doc.get('lat');
+      const lng = doc.get('lng');
+      const distanceInKm = geofire.distanceBetween([lat, lng], center);
+      const distanceInM = distanceInKm * 1000;
+      if (distanceInM <= radiusInM) {
+        matchingDocs.push({id, ...data});
+      }
+    }
+}
+        return matchingDocs;
+      }).then((matchingDocs) => {
+        filteredAdverts = matchingDocs;
+      });
+    };
+ if (value === "25km") {
+      const center = [lat, lng];
+      const radiusInM = 25 * 1000;
+      const bounds = geofire.geohashQueryBounds(center, radiusInM);
+      const promises = [];
+      for (const b of bounds) {
+    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
+  promises.push(getDocs(q));
+}
+Promise.all(promises).then((snapshots) => {
+  const matchingDocs = [];
+  for (const snap of snapshots) {
+    for (const doc of snap.docs) {
+      const data = doc.data()
+      const id = doc.id
+      const lat = doc.get('lat');
+      const lng = doc.get('lng');
+      const distanceInKm = geofire.distanceBetween([lat, lng], center);
+      const distanceInM = distanceInKm * 1000;
+      if (distanceInM <= radiusInM) {
+        matchingDocs.push({id, ...data});
+      }
+    }
+}
+        return matchingDocs;
+      }).then((matchingDocs) => {
+        filteredAdverts = matchingDocs;
+      });
+    };
+if (value === "50km") {
+      const center = [lat, lng];
+      const radiusInM = 50 * 1000;
+      const bounds = geofire.geohashQueryBounds(center, radiusInM);
+      const promises = [];
+      for (const b of bounds) {
+    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
+  promises.push(getDocs(q));
+}
+Promise.all(promises).then((snapshots) => {
+  const matchingDocs = [];
+  for (const snap of snapshots) {
+    for (const doc of snap.docs) {
+      const data = doc.data()
+      const id = doc.id
+      const lat = doc.get('lat');
+      const lng = doc.get('lng');
+      const distanceInKm = geofire.distanceBetween([lat, lng], center);
+      const distanceInM = distanceInKm * 1000;
+      if (distanceInM <= radiusInM) {
+        matchingDocs.push({id, ...data});
+      }
+    }
+}
+});
+}
+}
 </script>
 
 
@@ -57,10 +196,17 @@
         <option value={genre}>{genre}</option>
       {/each}
     </select>
+    <select class="dropdown" on:change={setDistance}>Distance
+      <option>All</option>
+      <option>5km</option>
+      <option>10km</option>
+      <option>25km</option>
+      <option>50km</option>
+    </select>
   </div>
   <section class="advert-grid">
-    {#each filteredAdverts as {advert_title: title, band_name: group, body, instrument_required: instruments, id }}
-      <AdvertCard {title} {group} {instruments} {body} {id} />
+    {#each filteredAdverts as {advert_title: title, band_name: group, body, instrument_required: instruments, id, owner_id }}
+      <AdvertCard {title} {group} {instruments} {body} {id} {owner_id}/>
     {/each}
   </section>
 </section>

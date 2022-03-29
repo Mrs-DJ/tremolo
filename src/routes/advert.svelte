@@ -20,7 +20,7 @@
 </script>
 
 <div>
-  {#each advert as { advert_title: title, band_name: group, body, instrument_required: instruments, id }}
-    <SingleAdvert {title} {group} {instruments} {body} />
+  {#each advert as { advert_title: title, band_name: group, body, instrument_required: instruments, owner_id }}
+    <SingleAdvert {title} {group} {instruments} {body} {owner_id} />
   {/each}
 </div>
