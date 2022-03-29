@@ -6,10 +6,12 @@
     orderBy,
     limit,
     onSnapshot,
+    setDoc,
+    updateDoc,
+    doc,
     serverTimestamp,
   } from "firebase/firestore";
   import { db, auth } from "../firebase";
-  import MessageCard from "./MessageCard.svelte";
 
   export let id;
   let uid;
@@ -22,44 +24,35 @@
     message = value;
   };
 
-  const deleteMessage = (toBeRemoved) => {
-    messages.splice(toBeRemoved, 1);
-    messages = messages;
-  };
-
   auth.operations.then(() => {
     uid = auth.currentUser.uid;
     chatId = uid < id ? `chat_${uid}_${id}` : `chat_${id}_${uid}`;
     messageQuery = query(
       collection(db, "Chats", chatId, "messages"),
       orderBy("timestamp", "asc"),
-      limit(12)
+      limit(12),
     );
 
     onSnapshot(messageQuery, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
-        if (change.type === "removed") {
-          const toBeRemoved = messages.findIndex(
-            (msg) => msg.id === change.doc.id,
-          );
-          setTimeout(() => deleteMessage(toBeRemoved), 3000);
-        } else {
-          const latestMessages = { id: change.doc.id, ...change.doc.data() };
-
-          if (latestMessages.timestamp) {
-            messages = [...messages, latestMessages];
-          }
+        const latestMessages = change.doc.data();
+        if (latestMessages.timestamp) {
+          messages = [...messages, latestMessages];
         }
       });
     });
   });
+
+  const getTimeElapsed = (time) => {
+    const date = new Date();
+    return Math.floor((date.getTime() - time) / 60000);
+  };
 
   const addMessage = (e) => {
     e.preventDefault();
     addDoc(
       collection(db, "Chats", chatId, "messages"),
       {
-        author: uid,
         text: message,
         timestamp: serverTimestamp(),
       },
@@ -73,8 +66,8 @@
 
 <section class="text-center">
   <div>
-    {#each messages as { author: authorId, text, timestamp, id }}
-      <MessageCard {id} {authorId} {text} {timestamp} {chatId} {uid} />
+    {#each messages as { text, timestamp }}
+      <p>{text}, {getTimeElapsed(timestamp.toMillis()) + "m ago"} </p>
     {/each}
   </div>
   <form on:submit={addMessage}>
@@ -84,10 +77,6 @@
 </section>
 
 <style>
-  .text-center {
-    max-width: 80vw;
-    margin: auto;
-  }
   input {
     color: black;
   }
