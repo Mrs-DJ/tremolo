@@ -1,6 +1,7 @@
 <script>
     import { collection, getDocs, doc, getDoc, orderBy, startAt, endAt, query } from "firebase/firestore";
   import { db, auth } from "../firebase";
+  import NavLink from "../components/NavLink.svelte";
   import geofire from "geofire-common";
   import AdvertCard from "./AdvertCard.svelte";
     
@@ -8,6 +9,7 @@
     let hash;
     let lat;
     let lng;
+    export let open = false;
     let profile = {};
     let adverts = [];
     $: filteredAdverts = adverts;
@@ -191,6 +193,9 @@ return matchingDocs;
 </svelte:head>
 
 <section>
+  <button>
+    <NavLink to={"Post"} bind:open={open}>Post Advert</NavLink>
+  </button>
   <div class="genre-filter">
     <i class="mi mi-filter-alt" />
     <select class="dropdown" on:change={setGenre}>
@@ -226,11 +231,14 @@ return matchingDocs;
     margin: auto;
     max-width: 90vw;
   }
-
   /* p {
     margin-right: 5px;
   } */
-
+   
+  button {
+    font-size: 15px;
+    align-self: center;
+  }
   .genre-filter {
     display: flex;
     justify-content: flex-end;

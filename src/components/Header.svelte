@@ -13,7 +13,7 @@
 
 <style>
   img {
-    width: 50%;
+    width: 50vw;
   }
   .header-card {
     display: flex;

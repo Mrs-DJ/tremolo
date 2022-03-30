@@ -7,7 +7,7 @@ const getTimeElapsed = (time) => {
   if (elapsed < 3600000) {
     return `${Math.floor(elapsed / 60000)}m`;
   }
-  if (elapsed < 216000000) {
+  if (elapsed < 86400000) {
     return `${Math.floor(elapsed / 3600000)}h`;
   }
   return `${Math.floor(elapsed / 86400000)}d`;
