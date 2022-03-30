@@ -35,7 +35,6 @@
   });
 
   // -- LOGIN FUNCTIONS
-
   function googleLogin() {
     signInWithRedirect(auth, googleProvider)
     .then((result) => {
@@ -113,6 +112,7 @@
     justify-content: center;
   }
 </style>
+
 
 
       
