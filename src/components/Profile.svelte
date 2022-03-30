@@ -15,6 +15,7 @@
   let youtubeLink = "";
 
   $: value = profile ? profile.bio || "" : "";
+
   const genres = [
     "Indie",
     "Alternative",
@@ -66,10 +67,8 @@
           youtubeLink = profile.youtubeLink;
         }
       }
-
       instruments = instruments;
       userGenres = userGenres;
-      console.log(levels);
     });
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -147,11 +146,6 @@
   };
 </script>
 
-
-  
-  
-
-    
 <section>
   <h1>{uid ? auth.currentUser.displayName || "Guest" : "loading..."}</h1>
   <form on:submit={setUser}>
@@ -305,3 +299,10 @@
     color: black;
   }
 </style>
+      
+
+
+  
+  
+
+    
