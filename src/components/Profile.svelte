@@ -11,6 +11,9 @@
   let hash;
   let lat;
   let lng;
+  let soundcloudUser = "";
+  let youtubeLink = "";
+
   $: value = profile ? profile.bio || "" : "";
   const genres = [
     "Indie",
@@ -56,6 +59,12 @@
         if (profile.level) {
           levels = profile.level;
         }
+        if (profile.soundcloudUser) {
+          soundcloudUser = profile.soundcloudUser;
+        }
+        if (profile.youtubeLink) {
+          youtubeLink = profile.youtubeLink;
+        }
       }
 
       instruments = instruments;
@@ -81,6 +90,14 @@
     email = e.target.value;
   };
 
+  const setSoundcloudUser = (e) => {
+    soundcloudUser = e.target.value;
+  };
+
+  const setYoutubeLink = (e) => {
+    youtubeLink = e.target.value;
+  };
+
   const setUser = (e) => {
     e.preventDefault();
     if (emailRegex.test(email)) {
@@ -96,6 +113,8 @@
           location: hash,
           lat,
           lng,
+          soundcloudUser,
+          youtubeLink,
         },
         {
           merge: true,
@@ -225,6 +244,24 @@
     />
     <p>{emailError ? "Email not valid" : ""}</p>
 
+    <input
+    on:change={setSoundcloudUser}
+    type="text"
+    placeholder="Soundcloud username: "
+    value={soundcloudUser}
+    label="soundcloud"
+    class="soundcloud-input"
+  />
+
+  <input
+    on:change={setYoutubeLink}
+    type="text"
+    placeholder="YouTube link: "
+    value={youtubeLink}
+    label="youtube"
+    class="youtube-input"
+  />
+
     <button type="submit">Update</button>
   </form>
 </section>
@@ -256,6 +293,12 @@
   .email-form-error {
     color: black;
     border: 3px solid red;
+  }
+  .soundcloud-input {
+    color:black;
+  }
+  .youtube-input {
+    color:black
   }
   .level-dropdown {
     color: black;
