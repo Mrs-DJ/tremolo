@@ -80,8 +80,6 @@
     }
   });
 
-  // setTimeout(() => {
-
   const setValue = (e) => {
     value = e.target.value;
   };
@@ -97,8 +95,7 @@
   const setYoutubeLink = (e) => {
     youtubeLink = e.target.value.slice(e.target.value.indexOf("=") + 1);
   };
-    
-
+  
   const setUser = (e) => {
     e.preventDefault();
     if (emailRegex.test(email)) {
@@ -119,7 +116,7 @@
         },
         {
           merge: true,
-        }
+        },
       );
     } else {
       emailError = true;
@@ -142,16 +139,19 @@
     } else {
       userGenres.splice(userGenres.indexOf(e.target.value), 1);
     }
-    console.log(userGenres);
   };
-
+  
   const setLevel = (e) => {
     levels[e.target.id] = e.target.value;
     levels = levels;
-    console.log(levels);
   };
 </script>
 
+
+  
+  
+
+    
 <section>
   <h1>{uid ? auth.currentUser.displayName || "Guest" : "loading..."}</h1>
   <form on:submit={setUser}>
@@ -241,7 +241,7 @@
       type="text"
       placeholder="Enter your email address here..."
       value={email}
-      label="HELLO"
+      label="email"
     />
     <p>{emailError ? "Email not valid" : ""}</p>
 
