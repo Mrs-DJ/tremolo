@@ -29,9 +29,7 @@
   let loggedInUser;
   let uid;
 
-  // --DUMMY EMAIL DETAILS --WILL BE REPLACED BY DYNAMIC VARIABLES SET BY FORM
-  const email = "test_email@email.com";
-  const password = "test_password";
+
 
   // --AUTH STATE LISTENER
   onAuthStateChanged(auth, (user) => {
@@ -55,33 +53,6 @@
       const errorMsg = error.message;
       console.log(errorCode, errorMsg, "errors in google catch block");
     });
-  }
-
-  function createUserAccount() {
-    createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      console.log(userCredential, ">>userCred in create account");
-      loggedInUser = userCredential.user;
-      console.log("logged in user", loggedInUser);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMsg = error.message;
-      console.log("errors in create account", errorCode, errorMsg);
-    });
-  }
-
-  function signInEmail() {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        loggedInUser = userCredential.user;
-        console.log("user obj in email sign-in", loggedInUser);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMsg = error.message;
-        console.log("email sign-in error", errorCode, errorMsg);
-      });
   }
 
   function signInAnon() {
@@ -120,16 +91,6 @@
         <button on:click={googleLogin}>
           <i class="fa fa-google" />
           Sign-In With Google
-        </button>
-
-        <button on:click={createUserAccount}>
-          <i class="fa fa-google" />
-          Create An Account With Email & Password
-        </button>
-
-        <button on:click={signInEmail}>
-          <i class="fa fa-google" />
-          Sign-In With Email & Password
         </button>
 
         <button on:click={signInAnon}>
