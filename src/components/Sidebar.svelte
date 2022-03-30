@@ -9,7 +9,6 @@
 		<NavLink class="cursor-pointer" to={"/"} bind:open={open}>Home</NavLink>
 		<NavLink to={"Users"} bind:open={open}>Users</NavLink>
 		<NavLink to={"Profile"} bind:open={open}>Profile</NavLink>
-		<NavLink to={"Post"} bind:open={open}>Post Advert</NavLink>
 	</nav>
 </aside>
 
