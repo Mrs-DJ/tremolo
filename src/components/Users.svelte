@@ -79,4 +79,13 @@ const setInstrument = ({ target: { value } }) => {
     height: 2.2rem;
     background-color: #333;
   }
+
+  .instrument-filter {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .mi {
+    font-size: 2rem;
+  }
   </style>

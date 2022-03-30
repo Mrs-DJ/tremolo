@@ -1,7 +1,13 @@
 {
     "name": "Tremolo",
     "short_name": "Trem",
-    "icons": [],
+    "icons": [
+        {
+            "src": "images/logo-icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
     "start_url": "/index.html",
     "display": "standalone",
     "background_color": "#3E4EB8",
