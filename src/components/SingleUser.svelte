@@ -22,7 +22,7 @@
   <p class="text-xs">{instrument}</p>
   <p class="text-xs">{location}</p>
   <p class="text-xs">{bio}</p>
-  <p>{username} and {soundcloudUser} and {youtubeLink}</p>
+  
 
   <i class="mi mi-message" on:click={handleClick} />
 </div>
