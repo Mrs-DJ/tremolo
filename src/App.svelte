@@ -29,9 +29,7 @@
   let loggedInUser;
   let uid;
 
-  // --DUMMY EMAIL DETAILS --WILL BE REPLACED BY DYNAMIC VARIABLES SET BY FORM
-  const email = "test_email@email.com";
-  const password = "test_password";
+
 
   // --AUTH STATE LISTENER
   onAuthStateChanged(auth, (user) => {
