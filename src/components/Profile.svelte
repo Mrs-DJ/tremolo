@@ -95,7 +95,8 @@
   };
 
   const setYoutubeLink = (e) => {
-    youtubeLink = e.target.value;
+    youtubeLink = e.target.value.slice(e.target.value.indexOf("=") + 1);
+    // e.target.value.indexOf("=")
   };
 
   const setUser = (e) => {
