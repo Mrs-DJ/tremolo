@@ -23,11 +23,19 @@
     "Blues",
     "Folk",
     "Pop",
-    "Shoegaze",
-    "Dream-pop",
-    "Hardcore",
+    "Hip-Hop",
+    "Metal",
     "Punk",
     "Rock",
+  ];
+
+  const menuInstruments = [
+    "Guitar",
+    "Bass",
+    "Drums",
+    "Vocals",
+    "Keys",
+    "Other",
   ];
 
   let email = "";
@@ -48,6 +56,7 @@
           profile.instrument.forEach((instrument) => {
             instruments.push(instrument);
           });
+          console.log(instruments);
         }
         if (profile.genre) {
           profile.genre.forEach((genre) => {
@@ -94,7 +103,7 @@
   const setYoutubeLink = (e) => {
     youtubeLink = e.target.value.slice(e.target.value.indexOf("=") + 1);
   };
-  
+
   const setUser = (e) => {
     e.preventDefault();
     if (emailRegex.test(email)) {
@@ -147,59 +156,26 @@
 </script>
 
 <section>
-  <h1>{uid ? auth.currentUser.displayName || "Guest" : "loading..."}</h1>
+  <h1>Hey, {profile.name || "Guest"}!</h1>
   <form on:submit={setUser}>
+    <h2>Bio</h2>
     <textarea {value} on:change={setValue} />
+    <h2>Instruments</h2>
     <span class="checkbox-flex">
-      <label for="guitar">Guitar</label>
+      {#each menuInstruments as instrument}
+      <div>
+        <label for={instrument}>{instrument === "Keys" ? "Keyboard/Synth" : instrument}</label>
       <input
         type="checkbox"
-        name="guitar"
-        value="Guitar"
-        checked={instruments.includes("Guitar")}
+        name={instrument}
+        value={instrument}
+        checked={instruments.includes(instrument)}
         on:change={setInstruments}
       />
-      <label for="bass">Bass</label>
-      <input
-        type="checkbox"
-        name="bass"
-        value="Bass"
-        checked={instruments.includes("Bass")}
-        on:change={setInstruments}
-      />
-      <label for="drums">Drums</label>
-      <input
-        type="checkbox"
-        name="drums"
-        value="Drums"
-        checked={instruments.includes("Drums")}
-        on:change={setInstruments}
-      />
-      <label for="vocals">Vocals</label>
-      <input
-        type="checkbox"
-        name="vocals"
-        value="Vocals"
-        checked={instruments.includes("Vocals")}
-        on:change={setInstruments}
-      />
-      <label for="keys">Keyboards/Synth</label>
-      <input
-        type="checkbox"
-        name="keys"
-        value="Keys"
-        checked={instruments.includes("Keys")}
-        on:change={setInstruments}
-      />
-      <label for="other">Other</label>
-      <input
-        type="checkbox"
-        name="other"
-        value="Other"
-        checked={instruments.includes("Other")}
-        on:change={setInstruments}
-      />
+      </div>
+      {/each}
     </span>
+    <h2>Proficiency</h2>
     <ul>
       {#each instruments as instrument}
         <li>{instrument}</li>
@@ -216,9 +192,10 @@
         </select>
       {/each}
     </ul>
-
+    <h2>Genres</h2>
     <span class="genre-select">
       {#each genres as genre}
+      <div>
         <label for={genre}>{genre}</label>
         <input
           type="checkbox"
@@ -226,9 +203,10 @@
           checked={userGenres.includes(genre)}
           on:change={setGenres}
         />
+      </div>
       {/each}
     </span>
-
+    <h2>Email</h2>
     <input
       class={emailError ? "email-form-error" : "email-form"}
       on:change={setEmail}
@@ -238,7 +216,7 @@
       label="email"
     />
     <p>{emailError ? "Email not valid" : ""}</p>
-
+    <h2>Media</h2>
     <input
     on:change={setSoundcloudUser}
     type="text"
@@ -263,27 +241,47 @@
 
 <style>
   section {
+    text-align: center;
     margin: auto;
-    max-width: 90vw;
+    max-width: 80vw;
   }
   textarea {
+    text-align: left;
     color: black;
   }
   h1 {
     font-size: 40px;
   }
+  h2 {
+    border-bottom: 1px solid white;
+    margin: 10px;
+    text-align: left;
+  }
+  ul {
+    text-align: left;
+    margin-left: 15px;
+  }
+  button {
+    margin: 10px;
+  }
   .checkbox-flex {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-gap: 15px;
   }
   label,
   input {
     margin: 3px;
   }
   .genre-select {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-gap: 15px;
   }
   .email-form {
     color: black;
+    text-align: left;
+    width: 80vw;
   }
   .email-form-error {
     color: black;
