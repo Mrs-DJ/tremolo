@@ -15,6 +15,7 @@
   let youtubeLink = "";
 
   $: value = profile ? profile.bio || "" : "";
+
   const genres = [
     "Indie",
     "Alternative",
@@ -75,10 +76,8 @@
           youtubeLink = profile.youtubeLink;
         }
       }
-
       instruments = instruments;
       userGenres = userGenres;
-      console.log(levels);
     });
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(({ coords }) => {
@@ -88,8 +87,6 @@
       });
     }
   });
-
-  // setTimeout(() => {
 
   const setValue = (e) => {
     value = e.target.value;
@@ -127,7 +124,7 @@
         },
         {
           merge: true,
-        }
+        },
       );
     } else {
       emailError = true;
@@ -150,13 +147,11 @@
     } else {
       userGenres.splice(userGenres.indexOf(e.target.value), 1);
     }
-    console.log(userGenres);
   };
-
+  
   const setLevel = (e) => {
     levels[e.target.id] = e.target.value;
     levels = levels;
-    console.log(levels);
   };
 </script>
 
@@ -218,7 +213,7 @@
       type="text"
       placeholder="Enter your email address here..."
       value={email}
-      label="HELLO"
+      label="email"
     />
     <p>{emailError ? "Email not valid" : ""}</p>
     <h2>Media</h2>
@@ -302,3 +297,10 @@
     color: black;
   }
 </style>
+      
+
+
+  
+  
+
+    
