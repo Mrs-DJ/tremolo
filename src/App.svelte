@@ -3,8 +3,6 @@
     signInWithRedirect,
     onAuthStateChanged,
     signOut,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
     signInAnonymously,
   } from "firebase/auth";
   import { Router, Route } from "svelte-routing";
@@ -20,16 +18,12 @@
   import { auth, googleProvider } from "./firebase";
   import advert from "./routes/advert.svelte";
 
-  let open = false;
-
   export let url = "";
-
-
+  
   let isLoggedIn = false;
   let loggedInUser;
   let uid;
-
-
+  let open = false;
 
   // --AUTH STATE LISTENER
   onAuthStateChanged(auth, (user) => {
@@ -41,41 +35,26 @@
   });
 
   // -- LOGIN FUNCTIONS
-
   function googleLogin() {
     signInWithRedirect(auth, googleProvider)
     .then((result) => {
       loggedInUser = result.user;
-      console.log(loggedInUser, "user in google sign in");
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMsg = error.message;
-      console.log(errorCode, errorMsg, "errors in google catch block");
     });
   }
-
+  
   function signInAnon() {
     signInAnonymously(auth)
       .then(() => {
-        console.log("signed in anon");
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMsg = error.message;
-        console.log("errors in sign in anon", errorCode, errorMsg);
       });
-  }
-
-  // --LOG OUT FUNCTION
-  function logOut() {
-    signOut(auth);
-    console.log("clicked");
-    console.log(loggedInUser);
-    isLoggedIn = false;
-  }
+    }
+  
+    // --LOG OUT FUNCTION
+    function logOut() {
+      signOut(auth);
+      isLoggedIn = false;
+    }
 </script>
-
+  
 <Router {url}>
   <Sidebar bind:open />
   <Navbar bind:sidebar={open} />
@@ -109,7 +88,7 @@
     <Route path="/User/:user_id" component="{User}" />
   </div>
 </Router>
-
+  
 <style>
   main {
     text-align: center;
@@ -133,3 +112,16 @@
     justify-content: center;
   }
 </style>
+
+
+
+      
+    
+
+        
+        
+        
+        
+
+
+
