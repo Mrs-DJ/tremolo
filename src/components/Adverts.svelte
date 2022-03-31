@@ -1,67 +1,79 @@
 <script>
-    import { collection, getDocs, doc, getDoc, orderBy, startAt, endAt, query } from "firebase/firestore";
+  import {
+    collection,
+    getDocs,
+    doc,
+    getDoc,
+    orderBy,
+    startAt,
+    endAt,
+    query,
+  } from "firebase/firestore";
   import { db, auth } from "../firebase";
   import NavLink from "../components/NavLink.svelte";
   import geofire from "geofire-common";
   import AdvertCard from "./AdvertCard.svelte";
-    
-    let uid;
-    let hash;
-    let lat;
-    let lng;
-    export let open = false;
-    let profile = {};
-    let adverts = [];
-    $: filteredAdverts = adverts;
 
-    const colRef = collection(db, "Adverts");
-    
-    getDocs(colRef).then((results) => {
-      results.forEach((doc) => {
-        const data = doc.data();
-        const id = doc.id;
-        adverts.push({ id, ...data });
-      });
-      adverts = adverts;
+  let uid;
+  let hash;
+  let lat;
+  let lng;
+  export let open = false;
+  let profile = {};
+  let adverts = [];
+  $: filteredAdverts = adverts;
+
+  const colRef = collection(db, "Adverts");
+
+  getDocs(colRef).then((results) => {
+    results.forEach((doc) => {
+      const data = doc.data();
+      const id = doc.id;
+      adverts.push({ id, ...data });
     });
-    
-    const genres = [
-      "Indie",
-      "Alternative",
-      "Jazz",
-      "Blues",
-      "Folk",
-      "Pop",
-      "Shoegaze",
-      "Dream-pop",
-      "Hardcore",
-      "Punk",
-      "Rock",
-    ];
-    const setGenre = ({ target: { value } }) => {
-      if (value === "All") {
-        filteredAdverts = filteredAdverts;
-      } else {
-        filteredAdverts = adverts.filter((ad) => ad.genre.includes(value));
-      }
-    };
-    auth.operations.then(() => {
+    adverts = adverts;
+  });
+
+  const genres = [
+    "Indie",
+    "Alternative",
+    "Jazz",
+    "Blues",
+    "Folk",
+    "Pop",
+    "Shoegaze",
+    "Dream-pop",
+    "Hardcore",
+    "Punk",
+    "Rock",
+  ];
+  const setGenre = ({ target: { value } }) => {
+    if (value === "All") {
+      filteredAdverts = filteredAdverts;
+    } else {
+      filteredAdverts = adverts.filter((ad) => ad.genre.includes(value));
+    }
+  };
+  auth.operations.then(() => {
     uid = auth.currentUser.uid;
     const colRef = doc(db, "Users", uid);
     getDoc(colRef).then((result) => {
-    profile = result.data();
-    uid = auth.currentUser.uid;
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(({ coords }) => {
-        hash = geofire.geohashForLocation([coords.latitude, coords.longitude]);
-        lat = coords.latitude;
-        lng = coords.longitude;
-      });
-    }
+      profile = result.data();
+      uid = auth.currentUser.uid;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(({ coords }) => {
+          hash = geofire.geohashForLocation([
+            coords.latitude,
+            coords.longitude,
+          ]);
+          lat = coords.latitude;
+          lng = coords.longitude;
+        });
+      }
+    });
   });
-});
-    
-const setDistance = ({ target: { value } }) => {
+
+  const setDistance = ({ target: { value } }) => {
     if (value === "All") {
       filteredAdverts = filteredAdverts;
     }
@@ -71,28 +83,35 @@ const setDistance = ({ target: { value } }) => {
       const bounds = geofire.geohashQueryBounds(center, radiusInM);
       const promises = [];
       for (const b of bounds) {
-    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
-  promises.push(getDocs(q));
-}
-Promise.all(promises).then((snapshots) => {
-  const matchingDocs = [];
-  for (const snap of snapshots) {
-    for (const doc of snap.docs) {
-      const data = doc.data()
-      const id = doc.id
-      const lat = doc.get('lat');
-      const lng = doc.get('lng');
-      const distanceInKm = geofire.distanceBetween([lat, lng], center);
-      const distanceInM = distanceInKm * 1000;
-      if (distanceInM <= radiusInM) {
-        matchingDocs.push({id, ...data});
+        const q = query(
+          collection(db, "Adverts"),
+          orderBy("location"),
+          startAt(b[0]),
+          endAt(b[1])
+        );
+        promises.push(getDocs(q));
       }
-    }
-}
-        return matchingDocs;
-      }).then((matchingDocs) => {
-        filteredAdverts = matchingDocs;
-      });
+      Promise.all(promises)
+        .then((snapshots) => {
+          const matchingDocs = [];
+          for (const snap of snapshots) {
+            for (const doc of snap.docs) {
+              const data = doc.data();
+              const id = doc.id;
+              const lat = doc.get("lat");
+              const lng = doc.get("lng");
+              const distanceInKm = geofire.distanceBetween([lat, lng], center);
+              const distanceInM = distanceInKm * 1000;
+              if (distanceInM <= radiusInM) {
+                matchingDocs.push({ id, ...data });
+              }
+            }
+          }
+          return matchingDocs;
+        })
+        .then((matchingDocs) => {
+          filteredAdverts = matchingDocs;
+        });
     }
     if (value === "10km") {
       const center = [lat, lng];
@@ -100,90 +119,110 @@ Promise.all(promises).then((snapshots) => {
       const bounds = geofire.geohashQueryBounds(center, radiusInM);
       const promises = [];
       for (const b of bounds) {
-    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
-  promises.push(getDocs(q));
-}
-Promise.all(promises).then((snapshots) => {
-  const matchingDocs = [];
-  for (const snap of snapshots) {
-    for (const doc of snap.docs) {
-      const data = doc.data()
-      const id = doc.id
-      const lat = doc.get('lat');
-      const lng = doc.get('lng');
-      const distanceInKm = geofire.distanceBetween([lat, lng], center);
-      const distanceInM = distanceInKm * 1000;
-      if (distanceInM <= radiusInM) {
-        matchingDocs.push({id, ...data});
+        const q = query(
+          collection(db, "Adverts"),
+          orderBy("location"),
+          startAt(b[0]),
+          endAt(b[1])
+        );
+        promises.push(getDocs(q));
       }
+      Promise.all(promises)
+        .then((snapshots) => {
+          const matchingDocs = [];
+          for (const snap of snapshots) {
+            for (const doc of snap.docs) {
+              const data = doc.data();
+              const id = doc.id;
+              const lat = doc.get("lat");
+              const lng = doc.get("lng");
+              const distanceInKm = geofire.distanceBetween([lat, lng], center);
+              const distanceInM = distanceInKm * 1000;
+              if (distanceInM <= radiusInM) {
+                matchingDocs.push({ id, ...data });
+              }
+            }
+          }
+          return matchingDocs;
+        })
+        .then((matchingDocs) => {
+          filteredAdverts = matchingDocs;
+        });
     }
-}
-        return matchingDocs;
-      }).then((matchingDocs) => {
-        filteredAdverts = matchingDocs;
-      });
-    };
- if (value === "25km") {
+    if (value === "25km") {
       const center = [lat, lng];
       const radiusInM = 25 * 1000;
       const bounds = geofire.geohashQueryBounds(center, radiusInM);
       const promises = [];
       for (const b of bounds) {
-    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
-  promises.push(getDocs(q));
-}
-Promise.all(promises).then((snapshots) => {
-  const matchingDocs = [];
-  for (const snap of snapshots) {
-    for (const doc of snap.docs) {
-      const data = doc.data()
-      const id = doc.id
-      const lat = doc.get('lat');
-      const lng = doc.get('lng');
-      const distanceInKm = geofire.distanceBetween([lat, lng], center);
-      const distanceInM = distanceInKm * 1000;
-      if (distanceInM <= radiusInM) {
-        matchingDocs.push({id, ...data});
+        const q = query(
+          collection(db, "Adverts"),
+          orderBy("location"),
+          startAt(b[0]),
+          endAt(b[1])
+        );
+        promises.push(getDocs(q));
       }
+      Promise.all(promises)
+        .then((snapshots) => {
+          const matchingDocs = [];
+          for (const snap of snapshots) {
+            for (const doc of snap.docs) {
+              const data = doc.data();
+              const id = doc.id;
+              const lat = doc.get("lat");
+              const lng = doc.get("lng");
+              const distanceInKm = geofire.distanceBetween([lat, lng], center);
+              const distanceInM = distanceInKm * 1000;
+              if (distanceInM <= radiusInM) {
+                matchingDocs.push({ id, ...data });
+              }
+            }
+          }
+          return matchingDocs;
+        })
+        .then((matchingDocs) => {
+          filteredAdverts = matchingDocs;
+        });
     }
-}
-        return matchingDocs;
-      }).then((matchingDocs) => {
-        filteredAdverts = matchingDocs;
-      });
-    };
-if (value === "50km") {
+    if (value === "50km") {
       const center = [lat, lng];
       const radiusInM = 50 * 1000;
       const bounds = geofire.geohashQueryBounds(center, radiusInM);
       const promises = [];
       for (const b of bounds) {
-    const q = query(collection(db, "Adverts"), orderBy("location"), startAt(b[0]), endAt(b[1]));
-  promises.push(getDocs(q));
-}
-Promise.all(promises).then((snapshots) => {
-  const matchingDocs = [];
-  for (const snap of snapshots) {
-    for (const doc of snap.docs) {
-      const data = doc.data()
-      const id = doc.id
-      const lat = doc.get('lat');
-      const lng = doc.get('lng');
-      const distanceInKm = geofire.distanceBetween([lat, lng], center);
-      const distanceInM = distanceInKm * 1000;
-      if (distanceInM <= radiusInM) {
-        matchingDocs.push({id, ...data});
+        const q = query(
+          collection(db, "Adverts"),
+          orderBy("location"),
+          startAt(b[0]),
+          endAt(b[1])
+        );
+        promises.push(getDocs(q));
       }
+      Promise.all(promises)
+        .then((snapshots) => {
+          const matchingDocs = [];
+          for (const snap of snapshots) {
+            for (const doc of snap.docs) {
+              const data = doc.data();
+              const id = doc.id;
+              const lat = doc.get("lat");
+              const lng = doc.get("lng");
+              const distanceInKm = geofire.distanceBetween([lat, lng], center);
+              const distanceInM = distanceInKm * 1000;
+              if (distanceInM <= radiusInM) {
+                matchingDocs.push({ id, ...data });
+              }
+            }
+          }
+          return matchingDocs;
+        })
+        .then((matchingDocs) => {
+          filteredAdverts = matchingDocs;
+        });
     }
-}
-return matchingDocs;
-      }).then((matchingDocs) => {
-        filteredAdverts = matchingDocs;
-      });
-    };
-  }
+  };
 </script>
-
 
 <svelte:head>
   <link
@@ -194,7 +233,7 @@ return matchingDocs;
 
 <section>
   <button>
-    <NavLink to={"Post"} bind:open={open}>Post Advert</NavLink>
+    <NavLink to={"Post"} bind:open>Post Advert</NavLink>
   </button>
   <div class="genre-filter">
     <i class="mi mi-filter-alt" />
@@ -204,7 +243,8 @@ return matchingDocs;
         <option value={genre}>{genre}</option>
       {/each}
     </select>
-    <select class="dropdown" on:change={setDistance}>Distance
+    <select class="dropdown" on:change={setDistance}
+      >Distance
       <option>All</option>
       <option>5km</option>
       <option>10km</option>
@@ -213,8 +253,8 @@ return matchingDocs;
     </select>
   </div>
   <section class="advert-grid">
-    {#each filteredAdverts as {advert_title: title, band_name: group, body, instrument_required: instruments, id, owner_id }}
-      <AdvertCard {title} {group} {instruments} {body} {id} {owner_id}/>
+    {#each filteredAdverts as { advert_title: title, band_name: group, body, instrument_required: instruments, id, owner_id }}
+      <AdvertCard {title} {group} {instruments} {body} {id} />
     {/each}
   </section>
 </section>
@@ -234,7 +274,7 @@ return matchingDocs;
   /* p {
     margin-right: 5px;
   } */
-   
+
   button {
     font-size: 15px;
     align-self: center;
