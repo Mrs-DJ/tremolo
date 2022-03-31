@@ -12,6 +12,7 @@
   import MessageCard from "./MessageCard.svelte";
 
   export let id;
+  export let name;
   let uid;
   let chatId;
   let message = "";
@@ -72,13 +73,16 @@
 </script>
 
 <section class="text-center">
+  <header>
+    <h2>Conversation with {name}</h2>
+  </header>
   <div>
     {#each messages as { author: authorId, text, timestamp, id }}
       <MessageCard {id} {authorId} {text} {timestamp} {chatId} {uid} />
     {/each}
   </div>
   <form on:submit={addMessage}>
-    <input type="text" value={message} on:change={setMessage} />
+    <input type="text" value={message} placeholder="What's on your mind?" on:change={setMessage} />
     <button type="submit">Send</button>
   </form>
 </section>
@@ -87,6 +91,7 @@
   .text-center {
     max-width: 80vw;
     margin: auto;
+    margin-top: 20px;
   }
   input {
     color: black;
