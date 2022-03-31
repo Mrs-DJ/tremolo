@@ -1,5 +1,5 @@
 <script>
-  import { collection, query, where, getDocs, doc } from "firebase/firestore";
+  import { collection, getDocs } from "firebase/firestore";
   import SingleAdvert from "../components/SingleAdvert.svelte";
   
   import { db } from "../firebase";
