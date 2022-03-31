@@ -17,6 +17,10 @@
 		left: -100%;
 		transition: left 0.3s ease-in-out
 	}
+	nav {
+		display: flex;
+		justify-content: space-between;
+	}
 	
 	.open {
 		left: 0
