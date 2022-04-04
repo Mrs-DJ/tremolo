@@ -35,34 +35,25 @@ We made Tremolo a progressive web application so that we could also download the
 To set this project up on your local machine, you will need to fork the project for this repository and take the url for your newly forked project and clone it down to your machine through the command line using the below:
 
 ```
-
 $ git clone /github-url-of-project/
-
 ```
 
 You will then need to install the dependency packages on your first time using the project with:
 
 ```
-
-npm i
-
+$ npm i
 ```
 
 Then navigate into the Tremolo folder using:
 
 ```
-
-cd tremolo
-
+$ cd tremolo
 ```
 
 You can then locally host the app by running:
 
 ```
-
-npm run dev
-
-
+$ npm run dev
 ```
 
 And then going to the local host provided in the terminal.
@@ -72,7 +63,6 @@ And then going to the local host provided in the terminal.
 This project uses the following software versions
 
 ```
-
 node: 16.13.1;
 rollup: 2.3.4;
 svelte: 3.0.0;
@@ -82,5 +72,4 @@ firebase: 9.6.9;
 geofire-common: 5.2.0;
 postcss: 7.0.39;
 sirv-cli: 2.0.0;
-
 ```
