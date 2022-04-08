@@ -4,6 +4,11 @@ Deployed App:
 
 https://tremolo-project.netlify.app/
 
+
+Group presentation:
+
+https://drive.google.com/file/d/1MxoGBYqcEY4TPfdGLbyxJR3JgqBcwn9s/view?usp=sharing
+
 ## About
 
 This app was designed as a final product for a coding bootcamp in a group of 5 people. The app is designed to help connect musicians together in a social network. The app works by having users post adverts about what they are looking for, be it a new member for there band or just looking for people to play some music together in their spare time.
