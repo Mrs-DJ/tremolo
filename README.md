@@ -34,16 +34,16 @@ To set this project up on your local machine, you will need to fork the project 
 $ git clone /github-url-of-project/
 ```
 
-You will then need to install the dependency packages on your first time using the project with:
-
-```
-$ npm i
-```
-
 Then navigate into the Tremolo folder using:
 
 ```
 $ cd tremolo
+```
+
+You will then need to install the dependency packages on your first time using the project with:
+
+```
+$ npm i
 ```
 
 You can then locally host the app by running:
